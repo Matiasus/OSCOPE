@@ -3,7 +3,7 @@
 <h2>Basic description</h2>
 <p>
 <ul>
-<li><b>MAX FREQUENCY SAMPLE:</b>&nbsp;40kHz / 8 bit resolution</li>
-<li></li>
+<li><b>MAX FREQUENCY SAMPLE:</b>&nbsp;40kHz</li>
+<li><b>RESOLUTION:</b>&nbps;8 bit resolution</li>
 </ul>
 </p>
