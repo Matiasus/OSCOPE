@@ -1,4 +1,4 @@
-<h1>Oscope</h1>
+<h1>Oscope - Atmega16</h1>
 <p>A/D convereter triggered by Timer0 with required frequency setting.</p>
 <h2>Basic description</h2>
 <p>
