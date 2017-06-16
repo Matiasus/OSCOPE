@@ -4,6 +4,6 @@
 <p>
 <ul>
 <li><b>MAX FREQUENCY SAMPLE:</b>&nbsp;40kHz</li>
-<li><b>RESOLUTION:</b>&nbps;8 bit resolution</li>
+<li><b>RESOLUTION:</b>&nbsp;8 bit resolution</li>
 </ul>
 </p>
