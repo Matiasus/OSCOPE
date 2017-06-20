@@ -26,9 +26,11 @@ ISR(INT0_vect)
 {
   // no axis
   _axis = 0;
-  // 
+  // menu
   ShowMenu();
+  // dealy
   _delay_ms(2000);
+
 }
 
 /**
