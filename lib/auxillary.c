@@ -251,9 +251,9 @@ void BufferShow()
     AxisShow();
   }
   // show buffer values
-  while (i > 0) {
+  while (i >= 0) {
     // draw line
-    DrawLine(i-1+OFFSET_X, i+OFFSET_X, OFFSET_Y+(HEIGHT-(_buffer[i-1] >> 2)), OFFSET_Y+(HEIGHT-(_buffer[i] >> 2)), 0xffff);
+    DrawLine(i-1+OFFSET_X, i+OFFSET_X, OFFSET_Y+(HEIGHT-(_buffer[i-1]>>2)), OFFSET_Y+(HEIGHT-(_buffer[i]>>2)), 0xffff);
     // decrement
     i--;
   }
