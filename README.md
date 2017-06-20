@@ -1,5 +1,5 @@
 <h1>Oscope - Atmega16</h1>
-  <p>A/D convereter triggered by Timer0 with required frequency setting.</p>
+  <p>Simple oscilloscope using inbuilt A/D convereter with frequency range settings up to 40 kHz displayed on 1.8 TFT LCD 162x132 pixels.</p>
 <h2>Basic description</h2>
 <p>
   <ul>
