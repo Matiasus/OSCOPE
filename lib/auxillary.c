@@ -251,7 +251,7 @@ void BufferShow()
     AxisShow();
   }
   // show buffer values
-  while (i >= 0) {
+  while (i > 0) {
     // draw line
     DrawLine(i-1+OFFSET_X, i+OFFSET_X, OFFSET_Y+(HEIGHT-(_buffer[i-1]>>2)), OFFSET_Y+(HEIGHT-(_buffer[i]>>2)), 0xffff);
     // decrement
@@ -278,10 +278,8 @@ void ShowMenu(void)
   uint8_t i = 0;
   // declaration & definition
   char *menu[2] = {"Exit", "Axis"};
- 
   // clear screen
   ClearScreen(0xffff);
-
   // check if reach the end
   while (i < 2) {
     // set text on position
