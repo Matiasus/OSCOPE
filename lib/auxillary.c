@@ -77,20 +77,14 @@ void ShowLoading(void)
  */
 void StartScope(void)
 {
+  // interrupt init
+  Int01Init();
+  // init adc
+  AdcInit();
   // init timer 1A
   Timer1AInit();
   // init timer 0
   Timer0Init();
-  // init adc
-  AdcInit();
-  // vselect channel
-  ADC_CHANNEL(1);
-  // start timer 0
-  TIMER0_START(PRESCALER_8);
-  // start timer 1A
-  TIMER1A_START(PRESCALER_1);
-  // interrupt init
-  Int01Init();
   // globa interrupts enabled
   sei();
   // loop
@@ -115,14 +109,24 @@ void Timer0Init(void)
 {
   // zero counter
   TCNT0  = 0;
-  //    foc0 = 10kHz (20kHz):
+  //    foc0 = 40kHz:
   // ---------------------------------------------
   //    OCR0 = [fclk/(N.focnX)] - 1
   //    fclk = 16 Mhz
   //       N = 8
   //    foc0 = 1/Toc0
   // Pozn. 
-  // Pri frekvencii 10kHz je pocitadlo dvakrat spustane
+  // Pri požadovanej frekvencii foc0 je pocitadlo dvakrat spustane, 
+  //  t. j. čas prevodu musí byť menší ako 1/foc0,
+  // -------------------------------------------------------------
+  // Príklad
+  //  foc0 = 40kHz => Toc0 = 25us 
+  //  Toc0 > 13,5 * Tadc, platí ak 25 us > 13,5*1us
+  //  Tadc = 1/fadc = 1/1000 000 => ADC PRESCALER = 16
+  //  v prípade ADC PRESCALER = 32 => Tadc = 2us, tým pádom 
+  //  neplatí podmienka Toc0 > 13,5*2us, pretože 25us < 27us 
+  // -------------------------------------------------------------
+  //   foc0    Toc0           
   //   40kHz ( 25us) -> OCR0 =  49; N =  8; (ADC PRESCALER 16)
   //   20kHz ( 50us) -> OCR0 =  99; N =  8; (ADC PRESCALER 32)
   //   10kHz (100us) -> OCR0 = 199; N =  8; (ADC PRESCALER 32)
@@ -139,6 +143,8 @@ void Timer0Init(void)
   // priznak sa nastavuje aj bez povolenia globalnych preruseni
   // a povoleni preruseni od zhody TCNT0 a OCR0
   TIFR  |= (1 << OCF0);
+  // start timer 0
+  TIMER0_START(PRESCALER_8);  
 }
 
 /***
@@ -165,6 +171,8 @@ void Timer1AInit(void)
   TCCR1A |= (1 << COM1A0);
   // Mod CTC -> TOP = OCR1A
   TCCR1B |= (1 << WGM12);
+  // start timer 1A
+  TIMER1A_START(PRESCALER_1);  
 }
 
 /***
@@ -180,21 +188,22 @@ void Timer1AInit(void)
  */
 void AdcInit(void)
 { 
-  // referencne napatie AVcc s externym kondenzatorom na AREF pine 
+  // reference voltage AVcc with external capacitor at AREF pin 
   ADMUX |= (1 << REFS0);
-  // zarovnanie do lava -> ADCH
+  // align to left -> ADCH
   ADMUX |= (1 << ADLAR);
-  // nastavenie prevodu
-  ADCSRA |= (1 << ADIE)  | // povolenie prerusenia 
-            (1 << ADEN)  | // povolenie prevodu 12 cyklov
-            (1 << ADATE);
-  // povolenie auto spustania
-  // nastavenie preddelicky na 32
+  // setting adc
+  ADCSRA |= (1 << ADIE)  | // adc interrupt enable
+            (1 << ADEN)  | // adc enable
+            (1 << ADATE);  // adc autotriggering enable
+  //set prescaler
   // f = 16Mhz / 32 = 500 kHz  = 2 us
-  // Prevod => 2us x 13.5 cykla = 27 us
+  // Tadc => 2us x 13.5 cykla = 27 us
   ADC_PRESCALER(ADC_PRESCALER_16); 
   // Timer/Counter0 Compare Match
   SFIOR |= (1 << ADTS1) | (1 << ADTS0);
+  // select channel
+  ADC_CHANNEL(1);
 }
 
 /***
@@ -211,7 +220,7 @@ void Int01Init(void)
   PORTD |= (1 << PD3) | (1 << PD2);
   // INT0 - rising edge
   MCUCR |= (1 << ISC01) | (1 << ISC00);
-  // INT 1 - rising edge
+  // INT1 - rising edge
   MCUCR |= (1 << ISC11) | (1 << ISC10);
   // enable interrupts INT0, INT1
   GICR |= (1 << INT1) | (1 << INT0);
@@ -243,7 +252,7 @@ void AxisShow()
     // move to right
     i += STEP_X;
   }
-
+  
   i = OFFSET_Y;
   // draw auxillary axis y
   while (i <= HEIGHT+OFFSET_Y) {
@@ -262,29 +271,32 @@ void AxisShow()
  */
 void BufferShow()
 {
+  char sreg;
   uint8_t i;
-  uint16_t color = 0xffff;
-
-  // zakazanie preruseni
+  // save SREG values
+  sreg = SREG;
+  // disable interrupts
   cli();
-  // vymazanie obrazovky
+  // clear screen
   ClearScreen(0x0000);
   // set text position
   SetPosition(0, OFFSET_Y+HEIGHT - 8);
-  // show axis
+  // show axis if flag set by external interrupt
   if (_axis != 0) {
     // vykreslenie osi
     AxisShow();
   }
-  // zobrazenie nabuffrovanych hodnot
+  // show buffer values
   for (i=0; i<WIDTH; i++) {
-    // zapis do retazca
-    DrawLine(i+OFFSET_X, i+OFFSET_X+1, HEIGHT+OFFSET_Y-HEIGHT*_buffer[i]/255, HEIGHT+OFFSET_Y-HEIGHT*_buffer[i+1]/255, color);
+    // draw line
+    DrawLine(i+OFFSET_X, i+OFFSET_X+1, HEIGHT+OFFSET_Y-HEIGHT*_buffer[i]/255, HEIGHT+OFFSET_Y-HEIGHT*_buffer[i+1]/255, 0xffff);
   }
-  // zobrazenie */
+  // show on screen
   UpdateScreen();
-  // vyckanie 1 s
+  // delay
   _delay_ms(1500);
-  // povolenie preruseni
+  // set stored values
+  SREG = sreg;
+  // enable interrputs
   sei();
 }
