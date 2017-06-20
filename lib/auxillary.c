@@ -30,46 +30,6 @@ volatile uint8_t _index = 0;
 volatile uint8_t _buffer[WIDTH];
 
 /**
- * @description Show loading
- *
- * @param  Void
- * @return Void
- */
-void ShowLoading(void)
-{
-  // declaration & definition
-  uint8_t x;
-  uint8_t y;
- 
-  // calc y
-  y = POSITION_YE - POSITION_YS;
-  // start x
-  x = POSITION_XS;
-
-  // init lcd driver
-  St7735Init();
-
-  // clear screen
-  ClearScreen(0x0000);
-  // set text on position
-  SetPosition(50, 20);
-  // draw string
-  DrawString("OSCOPE Ver.3", 0xffff, X2);
-
-  // check if reach the end
-  while (x++ < POSITION_XE) {
-    // set window
-    SetWindow(POSITION_XS, x, POSITION_YS, POSITION_YE);
-    // send color
-    SendColor565(0xffff, (x-POSITION_XS+1)*(y+1));
-    // update screen
-    UpdateScreen();
-    // delay
-    _delay_ms(10);
-  }
-}
-
-/**
  * @description Init settings
  *
  * @param  Void
@@ -234,7 +194,9 @@ void Int01Init(void)
  */
 void AxisShow()
 {
+  // init value for x
   uint8_t i = OFFSET_X;
+  // color line
   uint16_t color = 0x5C4B;
 
   // draw axis x
@@ -252,7 +214,7 @@ void AxisShow()
     // move to right
     i += STEP_X;
   }
-  
+  // init value for y
   i = OFFSET_Y;
   // draw auxillary axis y
   while (i <= HEIGHT+OFFSET_Y) {
@@ -271,8 +233,10 @@ void AxisShow()
  */
 void BufferShow()
 {
+  // sreg value
   char sreg;
-  uint8_t i;
+  // index
+  uint8_t i = WIDTH;
   // save SREG values
   sreg = SREG;
   // disable interrupts
@@ -287,9 +251,11 @@ void BufferShow()
     AxisShow();
   }
   // show buffer values
-  for (i=0; i<WIDTH; i++) {
+  while (i > 0) {
     // draw line
-    DrawLine(i+OFFSET_X, i+OFFSET_X+1, HEIGHT+OFFSET_Y-HEIGHT*_buffer[i]/255, HEIGHT+OFFSET_Y-HEIGHT*_buffer[i+1]/255, 0xffff);
+    DrawLine(i-1+OFFSET_X, i+OFFSET_X, OFFSET_Y+(HEIGHT-(_buffer[i-1]>>2)), OFFSET_Y+(HEIGHT-(_buffer[i]>>2)), 0xffff);
+    // decrement
+    i--;
   }
   // show on screen
   UpdateScreen();
@@ -300,3 +266,30 @@ void BufferShow()
   // enable interrputs
   sei();
 }
+
+/**
+ * @description Show menu
+ *
+ * @param  Void
+ * @return Void
+ */
+void ShowMenu(void)
+{
+  uint8_t i = 0;
+  // declaration & definition
+  char *menu[2] = {"Exit", "Axis"};
+  // clear screen
+  ClearScreen(0xffff);
+  // check if reach the end
+  while (i < 2) {
+    // set text on position
+    SetPosition(50, 20 + i*10);
+    // draw string
+    DrawString(menu[i], 0x0000, X1);
+    // decrement
+    i++;
+  }    
+  // update screen
+  UpdateScreen();
+}
+

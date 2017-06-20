@@ -26,19 +26,17 @@
   #define POSITION_YE  55
 
   // sirka (pocet zaznamenanych dat)
-  #define WIDTH 120
+  #define WIDTH 128
   // vyska
-  #define HEIGHT 80
-  // krok na x ovej osi
-  #define STEP_X 40
-  // krok na y ovej osi
-  #define STEP_Y 20
+  #define HEIGHT 64
   // posuv x
-  #define OFFSET_X 35
+  #define OFFSET_X 15
   // posuv y
-  #define OFFSET_Y 40
-  // pocet vzorkovacich frekvencii
-  #define N 5
+  #define OFFSET_Y 60
+  // krok na x ovej osi
+  #define STEP_X 32
+  // krok na y ovej osi
+  #define STEP_Y 16
   // @var Mozne kombinacie preddelicky hodin/taktu
   #define PRESCALER_STOP   0
   #define PRESCALER_1      1
@@ -74,15 +72,7 @@
   extern volatile uint8_t _index;
   // pole hodnot buffra
   extern volatile uint8_t _buffer[WIDTH];
-
-  /**
-   * @description Show loading image
-   *
-   * @param void
-   * @return void
-   */
-  void ShowLoading(void);
-  
+ 
   /**
    * @description Init settings of scope
    *
@@ -139,4 +129,13 @@
    */
   void BufferShow(void);
 
+  /**
+   * @description Show menu
+   *
+   * @param  Void
+   * @return Void
+   */
+  void ShowMenu(void);
+
 #endif
+

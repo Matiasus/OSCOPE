@@ -26,6 +26,11 @@ ISR(INT0_vect)
 {
   // no axis
   _axis = 0;
+  // menu
+  ShowMenu();
+  // dealy
+  _delay_ms(2000);
+
 }
 
 /**
@@ -62,8 +67,10 @@ ISR(ADC_vect)
  */
 int main(void)
 {
+  // init lcd driver
+  St7735Init();
   // loading logo
-  ShowLoading();  
+  //ShowLoading();  
   // scope function
   StartScope();
   // return & exit
