@@ -68,13 +68,8 @@
   // - nastavenie
   #define ADC_PRESCALER(PRESCALER) { ADCSRA &= ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0)); ADCSRA |= PRESCALER & 0x07; }
 
-  // pocitadlo
-  extern volatile int8_t _freq;
-  // pocitadlo
-  extern volatile int8_t _temp;
-  // pocitadlo
-  extern volatile uint8_t _count;
-
+  // axis
+  extern volatile uint8_t _axis;
   // pocitadlo
   extern volatile uint8_t _index;
   // pole hodnot buffra
@@ -89,51 +84,59 @@
   void ShowLoading(void);
   
   /**
-  * @description Init settings of scope
-  *
-  * @param void
-  * @return void
-  */
+   * @description Init settings of scope
+   *
+   * @param  Void
+   * @return Void
+   */
   void StartScope(void);
 
   /**
    * @description Init Timer0
    *
-   * @param uint8_t - number of seconds
-   * @return void
+   * @param  Void
+   * @return Void
    */
   void Timer0Init(void);
 
   /**
    * @descritpion Init Timer1A
    *
-   * @param void - number of seconds
-   * @return void
+   * @param  Void
+   * @return Void
    */
   void Timer1AInit(void);
 
   /**
    * @description Adc init
    *
-   * @param Void
+   * @param  Void
    * @return Void
    */
   void AdcInit(void);
+
+  /**
+   * @description Interrupts init
+   *
+   * @param  Void
+   * @return Void
+   */
+  void Int01Init(void);
   
   /**
-  * @description Axis show
-  *
-  * @param void
-  * @return void
-  */
-  void AxisShow();
+   * @description Axis show
+   *
+   * @param  Void
+   * @return Void
+   */
+  void AxisShow(void);
 
   /**
    * @description Show values on lcd
    *
-   * @param void
-   * @return void
+   * @param  Void
+   * @return Void
    */
-  void BufferShow();
+  void BufferShow(void);
 
 #endif
