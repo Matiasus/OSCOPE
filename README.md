@@ -7,6 +7,9 @@
     <li><b>FREQUENCY RANGE:</b>&nbsp;1kHz - 40kHz</li>    
     <li><b>RESOLUTION:</b>&nbsp;8 bit resolution</li>
   </ul>
-<h2>Demosntration</h2>  
+<h2>Demosntration</h2>
+  <p><img src="img/oscope-1.jpg" /></p>
+  <p><img src="img/oscope-2.jpg" /></p>
+  <p><img src="img/oscope-3.jpg" /></p>
 <h2>Inspiration</h2>  
 </p>
