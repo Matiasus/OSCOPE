@@ -114,7 +114,7 @@ const uint8_t INIT_ST7735B[] PROGMEM = {
     // Display inversion control, 
     //  1 argument
     //  no delay
-     INVCTR,
+    INVCTR,
             1,  
           0x0,  //     Line inversion
     // Magical unicorn dust, 
@@ -163,14 +163,14 @@ const uint8_t INIT_ST7735B[] PROGMEM = {
     // Normal display on
     //  no arguments
     //  delay
-      NORON, 
+    NORON, 
         DELAY, 
            10,  // 10 ms delay
 /*
     // Main screen turn on
     //  no arguments
     //  delay
-     DISPON,
+    DISPON,
         DELAY,  
           200   // 200 ms delay
 */
