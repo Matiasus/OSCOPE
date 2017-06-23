@@ -59,7 +59,7 @@ const uint8_t INIT_ST7735B[] PROGMEM = {
          0x03,  // 3 lines back porch
            10,  // 10 ms delay
     // Inversion mode off
-     INVOFF,
+    INVOFF,
         DELAY,  
            10,
     // Memory access ctrl (directions), 
