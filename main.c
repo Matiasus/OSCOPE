@@ -14,7 +14,7 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "lib/st7735.h"
-#include "lib/auxillary.h"
+#include "lib/oscope.h"
 
 /**
  * @description INT0 interrupt
@@ -24,13 +24,16 @@
  */
 ISR(INT0_vect) 
 {
-  // no axis
-  _axis = 0;
-  // menu
-  ShowMenu();
-  // dealy
-  _delay_ms(2000);
-
+  // if no exceed
+  if (_selector < (ITEMS+1)) {
+    // increment
+    _selector++;
+    // show menu
+    ShowMenu();
+  } else {
+    // null selector
+    _selector = 0;
+  }
 }
 
 /**
@@ -41,8 +44,7 @@ ISR(INT0_vect)
  */
 ISR(INT1_vect) 
 {
-  // with axis
-  _axis = 1;
+
 }
 
 /**
@@ -55,7 +57,7 @@ ISR(ADC_vect)
 {
   // set to zero after match registers TCNT0 a OCR1B
   TIFR |= (1 << OCF1B);
-  // value
+  // store value
   _buffer[_index++] = ADCH;
 }
 
@@ -69,8 +71,6 @@ int main(void)
 {
   // init lcd driver
   St7735Init();
-  // loading logo
-  //ShowLoading();  
   // scope function
   StartScope();
   // return & exit

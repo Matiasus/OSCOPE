@@ -20,10 +20,10 @@
 #include <stdio.h>
 #include <util/delay.h>
 #include "st7735.h"
-#include "auxillary.h"
+#include "oscope.h"
 
 // axis
-volatile uint8_t _axis = 1;
+volatile uint8_t _selector = 0;
 // pocitadlo
 volatile uint8_t _index = 0;
 // pole hodnot buffra
@@ -49,12 +49,15 @@ void StartScope(void)
   sei();
   // loop
   while(1) {
-    // show after buffer full
-    if (_index > WIDTH) {
-      // show buffer
-      BufferShow();
-      // zero index
-      _index = 0;
+    // select screen
+    if (_selector == 0) {
+      // show after buffer full
+      if (_index > WIDTH) {
+        // show buffer
+        BufferShow();
+        // zero index
+        _index = 0;
+      }
     }
   }
 }
@@ -245,11 +248,8 @@ void BufferShow()
   ClearScreen(0x0000);
   // set text position
   SetPosition(0, OFFSET_Y+HEIGHT - 8);
-  // show axis if flag set by external interrupt
-  if (_axis != 0) {
-    // vykreslenie osi
-    AxisShow();
-  }
+  // vykreslenie osi
+  AxisShow();
   // show buffer values
   while (i > 0) {
     // draw line
@@ -276,16 +276,46 @@ void BufferShow()
 void ShowMenu(void)
 {
   uint8_t i = 0;
+  // init position
+  uint8_t height = 20;
+  // init position
+  uint8_t position = 16;
+  // number of pixels
+  uint16_t area = (SIZE_X+1)*(height+4);
   // declaration & definition
-  char *menu[2] = {"Exit", "Axis"};
-  // clear screen
-  ClearScreen(0xffff);
+  char *menu[ITEMS] = {"SETTINGS", " INVCOL ", " VALUES ", "  AXIS  "};
+
+  if (_selector == 1) {
+    // clear screen
+    ClearScreen(0x0000);
+    // increment
+    _selector++;
+  }
+ 
   // check if reach the end
-  while (i < 2) {
-    // set text on position
-    SetPosition(50, 20 + i*10);
-    // draw string
-    DrawString(menu[i], 0x0000, X1);
+  while (i < ITEMS) {
+    // fill background color
+    if (i == (_selector-2)) {
+      // set window
+      SetWindow(0, SIZE_X, position-3, position + height);
+      // send color
+      SendColor565(0xffff, area);
+      // set text on position
+      SetPosition(60, position);
+      // draw string
+      DrawString(menu[i], 0x0000, X2);
+    } else {
+      // set window
+      SetWindow(0, SIZE_X, position-3, position + height);
+      // send color
+      SendColor565(0x0000, area);
+      // set text on position
+      SetPosition(60, position);
+      // draw string
+      DrawString(menu[i], 0xffff, X2);
+    }
+    // increase value
+    position += height;
     // decrement
     i++;
   }    

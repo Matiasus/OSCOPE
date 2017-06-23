@@ -13,8 +13,8 @@
  */
 
 /** @definition */
-#ifndef __AUXILLARY_H__
-#define __AUXILLARY_H__
+#ifndef __OSCOPE_H__
+#define __OSCOPE_H__
 
   /** @const Position loading image x start */
   #define POSITION_XS  20
@@ -65,9 +65,11 @@
   // - nulovanie bitov preddelicky
   // - nastavenie
   #define ADC_PRESCALER(PRESCALER) { ADCSRA &= ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0)); ADCSRA |= PRESCALER & 0x07; }
-
+  // menu items
+  #define ITEMS 4
+  
   // axis
-  extern volatile uint8_t _axis;
+  extern volatile uint8_t _selector;
   // pocitadlo
   extern volatile uint8_t _index;
   // pole hodnot buffra
