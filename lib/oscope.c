@@ -95,6 +95,7 @@ void Timer0Init(void)
   //   10kHz (100us) -> OCR0 = 199; N =  8; (ADC PRESCALER 32)
   //    5kHz (0.2ms) -> OCR0 =  49; N = 64; (ADC PRESCALER 32)
   //  2.5kHz (0.4ms) -> OCR0 =  99; N = 64; (ADC PRESCALER 32)
+  //    1kHz (0.1ms) -> OCR0 = 249; N = 64; (ADC PRESCALER 32)
   OCR0 = 49;
   // PIN PB3 - OC0 ako vystupny 
   // DDRB  |= (1 << PB3);
