@@ -5,7 +5,7 @@
   <ul>
     <li><b>MAX FREQUENCY SAMPLE:</b>&nbsp;40kHz</li>
     <li><b>FREQUENCY RANGE:</b>&nbsp;1kHz - 40kHz</li>    
-    <li><b>RESOLUTION:</b>&nbsp;8 bit resolution</li>
+    <li><b>RESOLUTION:</b>&nbsp;8 bits resolution</li>
     <li><b>MEMORY BUFFER:</b>&nbsp;128 bits</li>
   </ul>
 <h2>Demosntration</h2>
