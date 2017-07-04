@@ -22,12 +22,21 @@
 #include "st7735.h"
 #include "oscope.h"
 
-// axis
-volatile uint8_t _selector = 0;
-// pocitadlo
+// number of sample
 volatile uint8_t _index = 0;
-// pole hodnot buffra
+// selector
+volatile uint8_t _selector = 0;
+// array buffer
 volatile uint8_t _buffer[WIDTH];
+// array buffer
+//   40kHz ( 25us) -> OCR0 =  49; N =  8; (ADC PRESCALER 16)
+//   10kHz (100us) -> OCR0 = 199; N =  8; (ADC PRESCALER 32)
+//  2.5kHz (0.4ms) -> OCR0 =  99; N = 64; (ADC PRESCALER 32)
+//    1kHz (  1ms) -> OCR0 = 249; N = 64; (ADC PRESCALER 32)
+// OCR0 
+// Timer0 prescaler
+// Ad converter prescaler
+volatile uint8_t _frequency[ITEMS_FREQUENCIES][3] = {{49,PRESCALER_8,ADC_PRESCALER_16}, {199,PRESCALER_8,ADC_PRESCALER_32}, {99,PRESCALER_64,ADC_PRESCALER_32}, {249,PRESCALER_64,ADC_PRESCALER_32}};
 
 /**
  * @description Init settings
@@ -95,7 +104,7 @@ void Timer0Init(void)
   //   10kHz (100us) -> OCR0 = 199; N =  8; (ADC PRESCALER 32)
   //    5kHz (0.2ms) -> OCR0 =  49; N = 64; (ADC PRESCALER 32)
   //  2.5kHz (0.4ms) -> OCR0 =  99; N = 64; (ADC PRESCALER 32)
-  //    1kHz (0.1ms) -> OCR0 = 249; N = 64; (ADC PRESCALER 32)
+  //    1kHz (  1ms) -> OCR0 = 249; N = 64; (ADC PRESCALER 32)
   OCR0 = 49;
   // PIN PB3 - OC0 ako vystupny 
   // DDRB  |= (1 << PB3);
@@ -128,7 +137,7 @@ void Timer1AInit(void)
   //    fclk = 16 Mhz
   //       N = 1
   //   foc1A = 1/Toc1A
-  OCR1A = 7999;
+  OCR1A = 15999;
   // PIN PD5 - OC1A ako vystupny 
   DDRD  |= (1 << PD5);
   // Waveform generation - toggle
@@ -254,7 +263,8 @@ void BufferShow()
   // show buffer values
   while (i > 0) {
     // draw line
-    DrawLine(i-1+OFFSET_X, i+OFFSET_X, OFFSET_Y+(HEIGHT-(_buffer[i-1]>>2)), OFFSET_Y+(HEIGHT-(_buffer[i]>>2)), 0xffff);
+    //DrawLine(i-1+OFFSET_X, i+OFFSET_X, (_buffer[i-1]>>1), (_buffer[i]>>1), 0xffff);
+    DrawLine(i-1+OFFSET_X, i+OFFSET_X, OFFSET_Y+(HEIGHT-(_buffer[i-1]>>1)), OFFSET_Y+(HEIGHT-(_buffer[i]>>1)), 0xffff);
     // decrement
     i--;
   }
@@ -269,58 +279,65 @@ void BufferShow()
 }
 
 /**
- * @description Show menu
+ * @description Show items of menu and submenu
  *
- * @param  Void
+ * @param  char*
+ * @param  uint8_t
+ * @param  uint8_t
  * @return Void
  */
-void ShowMenu(void)
+void ShowItems(char **items, uint8_t count, uint8_t selector)
 {
   uint8_t i = 0;
   // init position
   uint8_t height = 20;
   // init position
-  uint8_t position = 16;
+  uint8_t step_y = 16;
+  // offset x 
+  uint8_t offset_x = 10;
   // number of pixels
-  uint16_t area = (SIZE_X+1)*(height+4);
-  // declaration & definition
-  char *menu[ITEMS] = {"SETTINGS", " INVCOL ", " VALUES ", "  AXIS  "};
-
-  if (_selector == 1) {
-    // clear screen
-    ClearScreen(0x0000);
-    // increment
-    _selector++;
-  }
+  uint16_t area = (SIZE_X+1)*(height+1);
  
+  // set window
+  SetWindow(0, SIZE_X, 5, 5 + height);
+  // send color
+  SendColor565(0x075f, area);
+  // set text on position
+  SetPosition(offset_x, 9);
+  // draw string
+  DrawString("MENU-SETTINGS ", 0x0000, X2);
+  // increase value
+  step_y += height;
+
   // check if reach the end
-  while (i < ITEMS) {
+  while (i < count) {
     // fill background color
-    if (i == (_selector-2)) {
+    if (i == (selector-1)) {
       // set window
-      SetWindow(0, SIZE_X, position-3, position + height);
+      SetWindow(0, SIZE_X, step_y, step_y + height);
       // send color
       SendColor565(0xffff, area);
       // set text on position
-      SetPosition(60, position);
+      SetPosition(offset_x, step_y+3);
       // draw string
-      DrawString(menu[i], 0x0000, X2);
+      DrawString(items[i], 0x0000, X2);
     } else {
       // set window
-      SetWindow(0, SIZE_X, position-3, position + height);
+      SetWindow(0, SIZE_X, step_y, step_y + height);
       // send color
       SendColor565(0x0000, area);
       // set text on position
-      SetPosition(60, position);
+      SetPosition(offset_x, step_y+3);
       // draw string
-      DrawString(menu[i], 0xffff, X2);
+      DrawString(items[i], 0xffff, X2);
     }
     // increase value
-    position += height;
+    step_y += height;
     // decrement
     i++;
   }    
   // update screen
   UpdateScreen();
 }
+
 

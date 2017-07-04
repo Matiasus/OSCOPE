@@ -28,15 +28,15 @@
   // sirka (pocet zaznamenanych dat)
   #define WIDTH 128
   // vyska
-  #define HEIGHT 64
+  #define HEIGHT 127
   // posuv x
-  #define OFFSET_X 15
+  #define OFFSET_X 0
   // posuv y
-  #define OFFSET_Y 60
+  #define OFFSET_Y 0
   // krok na x ovej osi
   #define STEP_X 32
   // krok na y ovej osi
-  #define STEP_Y 16
+  #define STEP_Y 32
   // @var Mozne kombinacie preddelicky hodin/taktu
   #define PRESCALER_STOP   0
   #define PRESCALER_1      1
@@ -65,8 +65,11 @@
   // - nulovanie bitov preddelicky
   // - nastavenie
   #define ADC_PRESCALER(PRESCALER) { ADCSRA &= ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0)); ADCSRA |= PRESCALER & 0x07; }
+
   // menu items
   #define ITEMS 4
+  // menu items
+  #define ITEMS_FREQUENCIES 4
   
   // axis
   extern volatile uint8_t _selector;
@@ -74,6 +77,8 @@
   extern volatile uint8_t _index;
   // pole hodnot buffra
   extern volatile uint8_t _buffer[WIDTH];
+  // array buffer
+  extern volatile uint8_t _frequency[ITEMS_FREQUENCIES][3];
  
   /**
    * @description Init settings of scope
@@ -134,10 +139,12 @@
   /**
    * @description Show menu
    *
-   * @param  Void
+   * @param  char*
+   * @param  uint8_t
+   * @param  uint8_t
    * @return Void
    */
-  void ShowMenu(void);
+  void ShowItems(char**, uint8_t, uint8_t);
 
 #endif
 
