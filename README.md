@@ -9,8 +9,9 @@
     <li><b>MEMORY BUFFER:</b>&nbsp;128 bits</li>
   </ul>
 <h2>Demosntration</h2>
-  <p><img src="img/oscope-1.jpg" /></p>
-  <p><img src="img/oscope-2.jpg" /></p>
-  <p><img src="img/oscope-3.jpg" /></p>
+  <p><img src="img/01-oscope.jpg" /></p>
+  <p><img src="img/02-oscope.jpg" /></p>
+  <p><img src="img/03-oscope.jpg" /></p>
+  <p><img src="img/04-oscope.jpg" /></p>  
 <h2>Inspiration</h2>  
 </p>
