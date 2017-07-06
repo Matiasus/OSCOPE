@@ -11,9 +11,8 @@
  * @inspiration http://www.displayfuture.com/Display/datasheet/controller/ST7735.pdf
  * ----------------------------------------------------------------------------------
  */
-#include <util/delay.h>
 #include <stdio.h>
-
+#include <util/delay.h>
 #include <avr/interrupt.h>
 #include "lib/st7735.h"
 #include "lib/oscope.h"
@@ -27,9 +26,19 @@
 ISR(INT0_vect) 
 {
   // frequencies menu
-  char *frequencies[ITEMS_FREQUENCIES] = {"f =  40kHz [T =  25us]", "f =  10kHz [T = 0.1ms]", "f = 2.5kHz [T = 0.4ms]", "f =   1kHz [T =   1ms]",};
+  char *frequencies[ITEMS_FREQUENCIES] = {
+    "f =  40kHz [T =  25us]", 
+    "f =  10kHz [T = 0.1ms]", 
+    "f = 2.5kHz [T = 0.4ms]", 
+    "f =   1kHz [T =   1ms]"
+  };
   // declaration & definition
-  char *items[ITEMS] = {"1 FREQENCIES", "2 VOLTAGES", "3 VALUES", "4 AXIS"};
+  char *items[ITEMS] = {
+    "1 FREQENCIES", 
+    "2 VOLTAGES", 
+    "3 VALUES", 
+    "4 AXIS"
+  };
   // main menu
   uint8_t menu = (0x0f & _selector);
   // sub menu
@@ -87,7 +96,12 @@ ISR(INT0_vect)
 ISR(INT1_vect) 
 {
   // frequencies menu
-  char *frequencies[ITEMS_FREQUENCIES] = {"f =  40kHz [T =  25us]", "f =  10kHz [T = 0.1ms]", "f = 2.5kHz [T = 0.4ms]", "f =   1kHz [T =   1ms]",};
+  char *frequencies[ITEMS_FREQUENCIES] = {
+    "f =  40kHz [T =  25us]", 
+    "f =  10kHz [T = 0.1ms]", 
+    "f = 2.5kHz [T = 0.4ms]", 
+    "f =   1kHz [T =   1ms]"
+  };
   // main menu
   uint8_t menu = (0x0f & _selector);
   // sub menu
