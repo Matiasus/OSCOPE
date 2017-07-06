@@ -13,5 +13,4 @@
   <p><img src="img/02-scope.jpg" /></p>
   <p><img src="img/03-scope.jpg" /></p>
   <p><img src="img/04-scope.jpg" /></p>  
-<h2>Inspiration</h2>  
 </p>
