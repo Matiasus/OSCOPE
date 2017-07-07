@@ -102,6 +102,18 @@ ISR(INT1_vect)
     "f = 2.5kHz [T = 0.4ms]", 
     "f =   1kHz [T =   1ms]"
   };
+  // array buffer
+  //   40kHz ( 25us) -> OCR0 =  49; N =  8; (ADC PRESCALER 16)
+  //   10kHz (100us) -> OCR0 = 199; N =  8; (ADC PRESCALER 32)
+  //  2.5kHz (0.4ms) -> OCR0 =  99; N = 64; (ADC PRESCALER 32)
+  //    1kHz (  1ms) -> OCR0 = 249; N = 64; (ADC PRESCALER 32)
+  // OCR0, Timer0 prescaler, Ad converter prescaler
+  uint8_t settings_freq[ITEMS_FREQUENCIES][3] = {
+    { 49,  PRESCALER_8, ADC_PRESCALER_16}, 
+    {199,  PRESCALER_8, ADC_PRESCALER_32}, 
+    { 99, PRESCALER_64, ADC_PRESCALER_32}, 
+    {249, PRESCALER_64, ADC_PRESCALER_32}
+  };
   // main menu
   uint8_t menu = (0x0f & _selector);
   // sub menu
@@ -129,11 +141,11 @@ ISR(INT1_vect)
       // switch off ADC
       ADC_PRESCALER(0);
       // set timer counter
-      OCR0 = _frequency[submenu-1][0];
+      OCR0 = settings_freq[submenu-1][0];
       // set prescaler timer 0
-      TIMER0_START(_frequency[submenu-1][1]);
+      TIMER0_START(settings_freq[submenu-1][1]);
       // set prescaler ADC
-      ADC_PRESCALER(_frequency[submenu-1][2]);
+      ADC_PRESCALER(settings_freq[submenu-1][2]);
       // enable adc 
       TIFR  |= (1 << OCF0);
       // set stored values
