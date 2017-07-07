@@ -95,6 +95,8 @@ ISR(INT0_vect)
  */
 ISR(INT1_vect) 
 {
+  // sreg value
+  char sreg;
   // frequencies menu
   char *frequencies[ITEMS_FREQUENCIES] = {
     "f =  40kHz [T =  25us]", 
@@ -130,8 +132,6 @@ ISR(INT1_vect)
       // show submenu
       ShowItems(frequencies, ITEMS_FREQUENCIES, submenu+1);
     } else {
-      // sreg value
-      char sreg;
       // save SREG values
       sreg = SREG;
       // disable interrupts
