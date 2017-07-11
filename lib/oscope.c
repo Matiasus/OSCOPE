@@ -36,7 +36,12 @@ volatile uint8_t _buffer[WIDTH];
 // OCR0 
 // Timer0 prescaler
 // Ad converter prescaler
-volatile uint8_t _frequency[ITEMS_FREQUENCIES][3] = {{49,PRESCALER_8,ADC_PRESCALER_16}, {199,PRESCALER_8,ADC_PRESCALER_32}, {99,PRESCALER_64,ADC_PRESCALER_32}, {249,PRESCALER_64,ADC_PRESCALER_32}};
+volatile uint8_t _frequency[ITEMS_FREQUENCIES][3] = {
+  { 49, PRESCALER_8,ADC_PRESCALER_16}, 
+  {199, PRESCALER_8,ADC_PRESCALER_32}, 
+  { 99,PRESCALER_64,ADC_PRESCALER_32}, 
+  {249,PRESCALER_64,ADC_PRESCALER_32}
+};
 
 /**
  * @description Init settings
