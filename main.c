@@ -44,11 +44,9 @@ ISR(INT0_vect)
   // sub menu
   uint8_t submenu = (_selector >> 4);
   // submenu not selected
-  if (submenu == 0)
-  {
+  if (submenu == 0) {
     // if no exceed
-    if (menu < ITEMS)
-    {
+    if (menu < ITEMS) {
       // needed clear the screen for the first time
       if (menu == 0) {
         // clear screen
