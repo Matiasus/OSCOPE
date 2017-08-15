@@ -29,6 +29,21 @@ volatile uint8_t _selector = 0;
 // array buffer
 volatile uint8_t _buffer[WIDTH];
 
+// array buffer
+//   40kHz ( 25us) -> OCR0 =  49; N =  8; (ADC PRESCALER 16)
+//   10kHz (100us) -> OCR0 = 199; N =  8; (ADC PRESCALER 32)
+//  2.5kHz (0.4ms) -> OCR0 =  99; N = 64; (ADC PRESCALER 32)
+//    1kHz (  1ms) -> OCR0 = 249; N = 64; (ADC PRESCALER 32)
+// OCR0 
+// Timer0 prescaler
+// Ad converter prescaler
+volatile uint8_t _frequency[ITEMS_FREQUENCIES][3] = {
+  { 49, PRESCALER_8,ADC_PRESCALER_16}, 
+  {199, PRESCALER_8,ADC_PRESCALER_32}, 
+  { 99,PRESCALER_64,ADC_PRESCALER_32}, 
+  {249,PRESCALER_64,ADC_PRESCALER_32}
+};
+
 /**
  * @description Init settings
  *

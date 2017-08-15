@@ -1,14 +1,14 @@
 /** 
- * Example of TFT controller st7735 wit ADC101S101
+ * Autotriggered OSCOPE with Timer0
  *
  * Copyright (C) 2016 Marian Hrinko.
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       23.01.2016
+ * @datum       15.08.2017
  * @file        main.c
  * @tested      AVR Atmega16
- * @inspiration http://www.displayfuture.com/Display/datasheet/controller/ST7735.pdf
+ * @inspiration 
  * ----------------------------------------------------------------------------------
  */
 #include <stdio.h>
@@ -143,7 +143,7 @@ ISR(INT1_vect)
       // set prescaler ADC
       ADC_PRESCALER(settings_freq[v_submenu-1][2]);
       // enable adc 
-      TIFR  |= (1 << OCF0);
+      TIFR |= (1 << OCF0);
       // set stored values
       SREG = v_sreg;
       // enable interrputs
