@@ -1,14 +1,14 @@
 /** 
- * Example of TFT controller st7735 wit ADC101S101
+ * Autotriggered OSCOPE with Timer0
  *
  * Copyright (C) 2016 Marian Hrinko.
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       23.01.2016
+ * @datum       15.08.2017
  * @file        main.c
  * @tested      AVR Atmega16
- * @inspiration http://www.displayfuture.com/Display/datasheet/controller/ST7735.pdf
+ * @inspiration 
  * ----------------------------------------------------------------------------------
  */
 #include <stdio.h>
@@ -63,8 +63,7 @@ ISR(INT0_vect)
   // item 1 of menu
   } else if (menu == 1) {
     // check if no exceed submenu items
-    if (submenu < ITEMS_FREQUENCIES)
-    {
+    if (submenu < ITEMS_FREQUENCIES) {
       // needed clear the screen for the first time
       if (submenu == 0) {
         // clear screen
@@ -105,8 +104,7 @@ ISR(INT1_vect)
   // sub menu
   uint8_t submenu = (_selector >> 4);
   // needed clear the screen for the first time
-  if (menu == 1)
-  {
+  if (menu == 1) {
     // needed clear the screen for the first time
     if (submenu == 0) {
       // clear screen
