@@ -131,7 +131,7 @@ ISR(INT1_vect)
       // set prescaler ADC
       ADC_PRESCALER(_frequency[submenu-1][2]);
       // enable adc 
-      TIFR  |= (1 << OCF0);
+      TIFR |= (1 << OCF0);
       // set stored values
       SREG = sreg;
       // enable interrputs
