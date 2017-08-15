@@ -26,63 +26,60 @@
 ISR(INT0_vect) 
 {
   // frequencies menu
-  char *frequencies[ITEMS_FREQUENCIES] = {
+  char *v_frequencies[ITEMS_FREQUENCIES] = {
     "f =  40kHz [T =  25us]", 
     "f =  10kHz [T = 0.1ms]", 
     "f = 2.5kHz [T = 0.4ms]", 
     "f =   1kHz [T =   1ms]"
   };
   // declaration & definition
-  char *items[ITEMS] = {
+  char *v_items[ITEMS] = {
     "1 FREQENCIES", 
     "2 VOLTAGES", 
     "3 VALUES", 
     "4 AXIS"
   };
   // main menu
-  uint8_t menu = (0x0f & _selector);
+  char v_menu = (0x0f & _selector);
   // sub menu
-  uint8_t submenu = (_selector >> 4);
+  char v_sub_menu = (_selector >> 4);
   // submenu not selected
-  if (submenu == 0)
-  {
+  if (v_menu == 0) {
     // if no exceed
-    if (menu < ITEMS)
-    {
-      // needed clear the screen for the first time
-      if (menu == 0) {
-        // clear screen
-        ClearScreen(0x0000);
-      }
+    if (v_submenu == 0) {
+      // clear screen
+      ClearScreen(0x0000);
+    }
+    // check if no exceed max items
+    if (v_menu < ITEMS) {
       // increment
       _selector++;
       // show menu
-      ShowItems(items, ITEMS, (_selector & 0x0f));
+      fv_show_menu(v_items, ITEMS, (_selector & 0x0f));
     } else {
       // null menu and submenu
       _selector = 0;
     }
   // item 1 of menu
-  } else if (menu == 1) {
+  } else if (v_menu == 1) {
     // check if no exceed submenu items
-    if (submenu < ITEMS_FREQUENCIES)
-    {
+    if (v_submenu < ITEMS_FREQUENCIES) {
       // needed clear the screen for the first time
-      if (submenu == 0) {
+      if (v_submenu == 0) {
         // clear screen
         ClearScreen(0x0000);
       }
       // increment low menu and move to the left 4 position
-      _selector = (((submenu+1) << 4) | menu);
+      _selector = (((v_submenu++) << 4) | v_menu);
       // show submenu
-      ShowItems(frequencies, ITEMS_FREQUENCIES, submenu+1);
+      f_show_menu(v_frequencies, ITEMS_FREQUENCIES, v_submenu);
     } else {
       // clear screen
       ClearScreen(0x0000);
       // null submenu 
       _selector = (0x0f & _selector);
       // show menu
-      ShowItems(items, ITEMS, (_selector & 0x0f));
+      f_show_menu(items, ITEMS, (_selector & 0x0f));
     }    
   }
 }
@@ -96,9 +93,9 @@ ISR(INT0_vect)
 ISR(INT1_vect) 
 {
   // sreg value
-  char sreg;
+  char v_sreg;
   // frequencies menu
-  char *frequencies[ITEMS_FREQUENCIES] = {
+  char *v_frequencies[ITEMS_FREQUENCIES] = {
     "f =  40kHz [T =  25us]", 
     "f =  10kHz [T = 0.1ms]", 
     "f = 2.5kHz [T = 0.4ms]", 
@@ -110,30 +107,29 @@ ISR(INT1_vect)
   //  2.5kHz (0.4ms) -> OCR0 =  99; N = 64; (ADC PRESCALER 32)
   //    1kHz (  1ms) -> OCR0 = 249; N = 64; (ADC PRESCALER 32)
   // OCR0, Timer0 prescaler, Ad converter prescaler
-  uint8_t settings_freq[ITEMS_FREQUENCIES][3] = {
+  char v_settings_freq[ITEMS_FREQUENCIES][3] = {
     { 49,  PRESCALER_8, ADC_PRESCALER_16}, 
     {199,  PRESCALER_8, ADC_PRESCALER_32}, 
     { 99, PRESCALER_64, ADC_PRESCALER_32}, 
     {249, PRESCALER_64, ADC_PRESCALER_32}
   };
   // main menu
-  uint8_t menu = (0x0f & _selector);
+  char v_menu = (0x0f & _selector);
   // sub menu
-  uint8_t submenu = (_selector >> 4);
+  char v_sub_menu = (_selector >> 4);
   // needed clear the screen for the first time
-  if (menu == 1)
-  {
+  if (v_menu == 1) {
     // needed clear the screen for the first time
-    if (submenu == 0) {
+    if (v_submenu == 0) {
       // clear screen
       ClearScreen(0x0000);
       // increment low menu and move to the left 4 position
-      _selector = (((submenu+1) << 4) | menu);
+      _selector = (((v_submenu++) << 4) | v_menu);
       // show submenu
-      ShowItems(frequencies, ITEMS_FREQUENCIES, submenu+1);
+      f_show_menu(v_frequencies, ITEMS_FREQUENCIES, v_submenu);
     } else {
       // save SREG values
-      sreg = SREG;
+      v_sreg = SREG;
       // disable interrupts
       cli();      
       // switch off timer0
@@ -141,15 +137,15 @@ ISR(INT1_vect)
       // switch off ADC
       ADC_PRESCALER(0);
       // set timer counter
-      OCR0 = settings_freq[submenu-1][0];
+      OCR0 = v_settings_freq[v_submenu-1][0];
       // set prescaler timer 0
-      TIMER0_START(settings_freq[submenu-1][1]);
+      TIMER0_START(v_settings_freq[v_submenu-1][1]);
       // set prescaler ADC
-      ADC_PRESCALER(settings_freq[submenu-1][2]);
+      ADC_PRESCALER(settings_freq[v_submenu-1][2]);
       // enable adc 
       TIFR  |= (1 << OCF0);
       // set stored values
-      SREG = sreg;
+      SREG = v_sreg;
       // enable interrputs
       sei();
     }
