@@ -55,7 +55,7 @@ ISR(INT0_vect)
       // increment
       _selector++;
       // show menu
-      fv_show_menu(v_items, ITEMS, (_selector & 0x0f));
+      f_show_menu(v_items, ITEMS, (_selector & 0x0f));
     } else {
       // null menu and submenu
       _selector = 0;
