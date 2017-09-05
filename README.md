@@ -9,4 +9,6 @@ Simple oscilloscope using inbuilt A/D convereter with frequency range settings u
 
 ## Demosntration
 ![40kHz sampling](img/01-scope.jpg)
-![40kHz sampling](img/01-scope.jpg)
+![40kHz sampling](img/02-scope.jpg)
+![40kHz sampling](img/03-scope.jpg)
+![40kHz sampling](img/04-scope.jpg)
