@@ -151,8 +151,7 @@ ISR(ADC_vect)
   // set to zero after match registers TCNT0 a OCR1B
   TIFR |= (1 << OCF1B);
   // check if index is less than max values
-  if (_index++ < WIDTH)
-  {
+  if (_index++ < WIDTH) {
     // store value
     _buffer[_index-1] = ADCH;
   }
