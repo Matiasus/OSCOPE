@@ -5,8 +5,8 @@
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       04.02.2017
- * @file        st7735.c
+ * @datum       01.11.2017
+ * @file        menu.c
  * @tested      AVR Atmega16
  * @inspiration 
  *
