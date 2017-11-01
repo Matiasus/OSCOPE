@@ -65,11 +65,6 @@
   // - nulovanie bitov preddelicky
   // - nastavenie
   #define ADC_PRESCALER(PRESCALER) { ADCSRA &= ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0)); ADCSRA |= PRESCALER & 0x07; }
-
-  // menu items
-  #define ITEMS 4
-  // menu items
-  #define ITEMS_FREQUENCIES 4
   
   // axis
   extern volatile uint8_t _selector;
@@ -77,8 +72,6 @@
   extern volatile uint8_t _index;
   // pole hodnot buffra
   extern volatile uint8_t _buffer[WIDTH];
-  // array buffer
-  extern volatile uint8_t _frequency[ITEMS_FREQUENCIES][3];
  
   /**
    * @description Init settings of scope
@@ -144,7 +137,7 @@
    * @param  uint8_t
    * @return Void
    */
-  void ShowItems(char**, uint8_t, uint8_t);
+  void ShowItems(const volatile char**, uint8_t, uint8_t, uint8_t);
 
 #endif
 
