@@ -5,8 +5,8 @@
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       04.02.2017
- * @file        st7735.c
+ * @datum       01.11.2017
+ * @file        oscope.c
  * @tested      AVR Atmega16
  * @inspiration 
  *
@@ -258,26 +258,8 @@ void BufferShow()
   AxisShow();
   // show buffer values
   while (i > 0) {
-
-
-    DrawLine(i-1+OFFSET_X, i+OFFSET_X, OFFSET_Y+(HEIGHT-(_buffer[i-1]>>1)), OFFSET_Y+(HEIGHT-(_buffer[i]>>1)), 0xffff);
-/*
-
-  ClearScreen(0x0000);
-  // set text position
-  SetPosition(10, 10);
-  itoa(_buffer[i-1]>>1, str, 10);
-  DrawString(str, 0xffff,X1);
-  SetPosition(40, 10);
-  itoa(_buffer[i]>>1, str, 10);
-  DrawString(str, 0xffff,X1);
-
     // draw line
-    DrawLine(i-1+OFFSET_X, i+OFFSET_X, (_buffer[i-1]>>1), (_buffer[i]>>1), 0xffff);
-
-  UpdateScreen();
-  _delay_ms(500);
-*/
+    DrawLine(i-1+OFFSET_X, i+OFFSET_X, OFFSET_Y+(HEIGHT-(_buffer[i-1]>>1)), OFFSET_Y+(HEIGHT-(_buffer[i]>>1)), 0xffff);
     // decrement
     i--;
   }
