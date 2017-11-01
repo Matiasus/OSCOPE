@@ -1,11 +1,11 @@
 /** 
- * Example of TFT controller st7735 wit ADC101S101
+ * Oscilloscope
  *
  * Copyright (C) 2016 Marian Hrinko.
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       23.01.2016
+ * @datum       01.11.2017
  * @file        main.c
  * @tested      AVR Atmega16
  * @inspiration http://www.displayfuture.com/Display/datasheet/controller/ST7735.pdf
@@ -45,7 +45,7 @@ ISR(INT0_vect)
       // increment menu item
       _selector++;
       // show menu
-      ShowItems(_menu_items, MENU_ITEMS, _selector, _selector-1);
+      ShowItems(_menu_items, MENU_ITEMS, _selector);
     // selector exceed max value
     } else {
       // null menu and submenu
@@ -61,13 +61,13 @@ ISR(INT0_vect)
       // increment sub menu and move to the left 4 position
       _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
       // show submenu level 1
-      ShowItems(_submenu_1_items, SUBMENU_1_ITEMS, sel_2nd_lev+1, (0x03 & _flag));
+      ShowItems(_submenu_1_items, SUBMENU_1_ITEMS, sel_2nd_lev+1);
     // selector exceed max value
     } else {
       // null menu and submenu
       _selector = 0x01;
       // show menu
-      ShowItems(_menu_items, MENU_ITEMS, _selector, _selector-1);   
+      ShowItems(_menu_items, MENU_ITEMS, _selector);   
     }
   // SUBMENU - 2 
   // ----------------------------------------------------------
@@ -79,13 +79,13 @@ ISR(INT0_vect)
       // increment sub menu and move to the left 4 position
       _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
       // show submenu level 1
-      ShowItems(_submenu_2_items, SUBMENU_2_ITEMS, sel_2nd_lev+1, (0x0C & _flag));
+      ShowItems(_submenu_2_items, SUBMENU_2_ITEMS, sel_2nd_lev+1);
     // selector exceed max value
     } else {
       // null menu and submenu
       _selector = 0x02;
       // show menu
-      ShowItems(_menu_items, MENU_ITEMS, _selector, _selector-1);   
+      ShowItems(_menu_items, MENU_ITEMS, _selector);   
     }
   // SUBMENU - 3 
   // ----------------------------------------------------------
@@ -97,13 +97,13 @@ ISR(INT0_vect)
       // increment sub menu and move to the left 4 position
       _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
       // show submenu level 1
-      ShowItems(_submenu_3_items, SUBMENU_3_ITEMS, sel_2nd_lev+1, (0x30 & _flag));
+      ShowItems(_submenu_3_items, SUBMENU_3_ITEMS, sel_2nd_lev+1);
     // selector exceed max value
     } else {
       // null menu and submenu
       _selector = 0x03;
       // show menu
-      ShowItems(_menu_items, MENU_ITEMS, _selector, _selector-1);   
+      ShowItems(_menu_items, MENU_ITEMS, _selector);   
     }
   // SUBMENU - 4 
   // ----------------------------------------------------------
@@ -115,13 +115,13 @@ ISR(INT0_vect)
       // increment sub menu and move to the left 4 position
       _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
       // show submenu level 1
-      ShowItems(_submenu_4_items, SUBMENU_4_ITEMS, sel_2nd_lev+1, (0xC0 & _flag));
+      ShowItems(_submenu_4_items, SUBMENU_4_ITEMS, sel_2nd_lev+1);
     // selector exceed max value
     } else {
       // null menu and submenu
       _selector = 0x04;
       // show menu
-      ShowItems(_menu_items, MENU_ITEMS, _selector, _selector-1);   
+      ShowItems(_menu_items, MENU_ITEMS, _selector);   
     }
   }
 }
@@ -153,7 +153,7 @@ ISR(INT1_vect)
       // increment sub menu and move to the left 4 position
       _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
       // show submenu level 1
-      ShowItems(_submenu_1_items, SUBMENU_1_ITEMS, sel_2nd_lev+1, (0x03 & _flag));
+      ShowItems(_submenu_1_items, SUBMENU_1_ITEMS, sel_2nd_lev+1);
     // -----------------------------------------------------------
     // SUBMENU 2
     } else if (sel_1st_lev == 2) {
@@ -161,7 +161,7 @@ ISR(INT1_vect)
       // increment sub menu and move to the left 4 position
       _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
       // show submenu level 1
-      ShowItems(_submenu_2_items, SUBMENU_2_ITEMS, sel_2nd_lev+1, (0x0C & _flag));
+      ShowItems(_submenu_2_items, SUBMENU_2_ITEMS, sel_2nd_lev+1);
     // -----------------------------------------------------------
     // SUBMENU 3
     } else if (sel_1st_lev == 3) {
@@ -169,7 +169,7 @@ ISR(INT1_vect)
       // increment sub menu and move to the left 4 position
       _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
       // show submenu level 1
-      ShowItems(_submenu_3_items, SUBMENU_3_ITEMS, sel_2nd_lev+1, (0x30 & _flag));
+      ShowItems(_submenu_3_items, SUBMENU_3_ITEMS, sel_2nd_lev+1);
     // -----------------------------------------------------------
     // SUBMENU 4
     } else if (sel_1st_lev == 4) {
@@ -177,7 +177,7 @@ ISR(INT1_vect)
       // increment sub menu and move to the left 4 position
       _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
       // show submenu level 1
-      ShowItems(_submenu_4_items, SUBMENU_4_ITEMS, sel_2nd_lev+1, (0xC0 & _flag));
+      ShowItems(_submenu_4_items, SUBMENU_4_ITEMS, sel_2nd_lev+1);
     }
   // 1st submenu processing
   // -------------------------------------------------------------
@@ -193,7 +193,7 @@ ISR(INT1_vect)
     // null menu and submenu
     _selector = 0x01;
     // show menu
-    ShowItems(_menu_items, MENU_ITEMS, _selector, _selector-1);
+    ShowItems(_menu_items, MENU_ITEMS, _selector);
   // 2nd submenu processing
   // -------------------------------------------------------------
   // this is case when operation should be performed for
@@ -215,7 +215,7 @@ ISR(INT1_vect)
     // null menu and submenu
     _selector = 0x03;
     // show menu
-    ShowItems(_menu_items, MENU_ITEMS, _selector, _selector-1);
+    ShowItems(_menu_items, MENU_ITEMS, _selector);
   // 4th submenu processing
   // -------------------------------------------------------------
   // this is case when operation should be performed for
@@ -225,6 +225,10 @@ ISR(INT1_vect)
     _flag &= ~(0xC0);
     // update _flag
     _flag |= ((sel_2nd_lev-1) << 6);
+    // null menu and submenu
+    _selector = 0x04;
+    // show menu
+    ShowItems(_menu_items, MENU_ITEMS, _selector);
   }
 }
 

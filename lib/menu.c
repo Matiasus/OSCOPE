@@ -50,10 +50,10 @@ const volatile char *_submenu_3_items[SUBMENU_3_ITEMS] = {
 };
 // submenu text - axis show
 const volatile char *_submenu_4_items[SUBMENU_4_ITEMS] = {
-  "Axis x - yes", 
-  "Axis y - yes",
-  "Axis x - no", 
-  "Axis y - no"
+  "Main, auxillary - on", 
+  "Main, auxillary - off",
+  "Auxillary - off", 
+  "Main - off"
 };
 
 // SETTINGS for microprocesor
@@ -111,19 +111,8 @@ void SetFreq(uint8_t sel_2nd_level)
  * @param  Void
  * @return Void
  */
-void SetValues()
+void ShowValues()
 {
-/*
-  char str[10];
-  // to string
-  itoa(_flag, str, 10);
-
-  // set position for values
-  SetPosition(132, 20);
-  // draw values
-  DrawString(str, 0xffff, X1);
-*/
-
   if ((_flag & 0x30) == 0) {
     // set position for values
     SetPosition(132, 6);
@@ -142,5 +131,86 @@ void SetValues()
       DrawString("  1k", 0xffff, X1);
     }
   }
+}
 
+/**
+ * @description 
+ *
+ * @param  Void
+ * @return Void
+ */
+void ShowAxis()
+{
+
+  // init value for x
+  uint8_t i = OFFSET_X;
+  // color line
+  uint16_t color = 0x5C4B;
+
+  // --------------------------------------------------
+  // Main axes show
+  if ((_flag & 0xC0) == 0) {
+    // Main axis x
+    // draw axis x
+    DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, OFFSET_Y+HEIGHT, color);
+    //  draw axis x
+    DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, OFFSET_Y, color);
+    // Main axis y
+    //  draw axis y
+    DrawLineVertical(OFFSET_X, OFFSET_Y, OFFSET_Y+HEIGHT, color);
+    //  draw axis y
+    DrawLineVertical(OFFSET_X+WIDTH, OFFSET_Y, OFFSET_Y+HEIGHT, color);
+    // move to right
+    i = STEP_X;
+    // draw auxillary axis x
+    while (i < WIDTH) {
+      // draw auxillary signs up
+      DrawLineVertical(i, OFFSET_Y, OFFSET_Y+HEIGHT, color);
+      // move to right
+      i += STEP_X;
+    }
+    // init value for y
+    i = OFFSET_Y;
+    // draw auxillary axis y
+    while (i < HEIGHT+OFFSET_Y) {
+      // move to right
+      i += STEP_Y;
+      // draw line
+      DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, i, color);
+    }
+  // --------------------------------------------------
+  // Auxillary axis show
+  } else if ((_flag & 0xC0) == 192) {
+    // move to right
+    i = STEP_X;
+    // draw auxillary axis x
+    while (i < WIDTH) {
+      // draw auxillary signs up
+      DrawLineVertical(i, OFFSET_Y, OFFSET_Y+HEIGHT, color);
+      // move to right
+      i += STEP_X;
+    }
+    // init value for y
+    i = OFFSET_Y;
+    // draw auxillary axis y
+    while (i < HEIGHT+OFFSET_Y) {
+      // move to right
+      i += STEP_Y;
+      // draw line
+      DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, i, color);
+    }
+  // --------------------------------------------------
+  // Main axis show
+  } else if ((_flag & 0xC0) == 128) {
+    // Main axis x
+    // draw axis x
+    DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, OFFSET_Y+HEIGHT, color);
+    //  draw axis x
+    DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, OFFSET_Y, color);
+    // Main axis y
+    //  draw axis y
+    DrawLineVertical(OFFSET_X, OFFSET_Y, OFFSET_Y+HEIGHT, color);
+    //  draw axis y
+    DrawLineVertical(OFFSET_X+WIDTH, OFFSET_Y, OFFSET_Y+HEIGHT, color);
+  }
 }

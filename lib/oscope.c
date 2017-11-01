@@ -5,8 +5,8 @@
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       01.11.2017
- * @file        oscope.c
+ * @datum       04.02.2017
+ * @file        st7735.c
  * @tested      AVR Atmega16
  * @inspiration 
  *
@@ -198,37 +198,9 @@ void Int01Init(void)
  * @param void
  * @return void
  */
-void AxisShow()
+void Axis()
 {
-  // init value for x
-  uint8_t i = OFFSET_X;
-  // color line
-  uint16_t color = 0x5C4B;
 
-  // draw axis x
-  DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, OFFSET_Y+HEIGHT, color);
-  //  draw axis x
-  DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, OFFSET_Y, color);
-  //  draw axis y
-  DrawLineVertical(OFFSET_X, OFFSET_Y, OFFSET_Y+HEIGHT, color);
-  //  draw axis y
-  DrawLineVertical(OFFSET_X+WIDTH, OFFSET_Y, OFFSET_Y+HEIGHT, color);
-  // draw auxillary axis x
-  while (i <= WIDTH+OFFSET_X) {
-    // draw auxillary signs up
-    DrawLineVertical(i, OFFSET_Y, OFFSET_Y+HEIGHT, color);
-    // move to right
-    i += STEP_X;
-  }
-  // init value for y
-  i = OFFSET_Y;
-  // draw auxillary axis y
-  while (i <= HEIGHT+OFFSET_Y) {
-    // draw line
-    DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, i, color);
-    // move to right
-    i += STEP_Y;
-  }
 }
 
 /**
@@ -239,9 +211,6 @@ void AxisShow()
  */
 void BufferShow()
 {
-
-  //char str[5];
-
   // sreg value
   char sreg;
   // index
@@ -255,16 +224,16 @@ void BufferShow()
   // set text position
   SetPosition(0, OFFSET_Y+HEIGHT - 8);
   // vykreslenie osi
-  AxisShow();
+  ShowAxis();
   // show buffer values
   while (i > 0) {
-    // draw line
+    // draw values
     DrawLine(i-1+OFFSET_X, i+OFFSET_X, OFFSET_Y+(HEIGHT-(_buffer[i-1]>>1)), OFFSET_Y+(HEIGHT-(_buffer[i]>>1)), 0xffff);
     // decrement
     i--;
   }
   // call set values
-  SetValues();
+  ShowValues();
   // show on screen
   UpdateScreen();
   // delay
@@ -284,7 +253,7 @@ void BufferShow()
  * @param  uint8_t
  * @return Void
  */
-void ShowItems(const volatile char **items, uint8_t count, uint8_t selector, uint8_t flag)
+void ShowItems(const volatile char **items, uint8_t count, uint8_t selector)
 {
   uint8_t i = 0;
   // init position

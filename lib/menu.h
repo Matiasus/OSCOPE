@@ -63,7 +63,15 @@
    * @param  Void
    * @return Void
    */
-  void SetValues(void);
+  void ShowValues(void);
+
+  /**
+   * @description 
+   *
+   * @param  Void
+   * @return Void
+   */
+  void ShowAxis(void);
 
 #endif
 

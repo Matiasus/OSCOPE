@@ -5,8 +5,8 @@
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       01.11.2017
- * @file        oscope.h
+ * @datum       08.01.2016
+ * @file        st7735.h
  * @tested      AVR Atmega16
  * @inspiration 
  * ------------------------------------------------
@@ -26,7 +26,7 @@
   #define POSITION_YE  55
 
   // sirka (pocet zaznamenanych dat)
-  #define WIDTH 128
+  #define WIDTH 127
   // vyska
   #define HEIGHT 127
   // posuv x
@@ -134,10 +134,9 @@
    *
    * @param  char*
    * @param  uint8_t
-   * @param  uint8_t
    * @return Void
    */
-  void ShowItems(const volatile char**, uint8_t, uint8_t, uint8_t);
+  void ShowItems(const volatile char**, uint8_t, uint8_t);
 
 #endif
 
