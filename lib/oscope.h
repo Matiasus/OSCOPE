@@ -5,8 +5,8 @@
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       08.01.2016
- * @file        st7735.h
+ * @datum       01.11.2017
+ * @file        oscope.h
  * @tested      AVR Atmega16
  * @inspiration 
  * ------------------------------------------------
