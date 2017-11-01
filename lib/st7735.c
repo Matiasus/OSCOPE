@@ -336,6 +336,8 @@ void St7735Init(void)
   PORT |= (1 << ST7735_BL);
   // init spi
   SpiInit();
+  // reset
+  HardwareReset();
   // load list of commands
   St7735Commands(INIT_ST7735B);
 }
@@ -701,7 +703,7 @@ char DrawChar(char character, uint16_t color, ESizes size)
  * @param Esizes    see enum sizes in st7735.h
  * @return void
  */
-void DrawString(char *str, uint16_t color, ESizes size)
+void DrawString(volatile const char *str, uint16_t color, ESizes size)
 {
   // variables
   uint8_t i = 0;

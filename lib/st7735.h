@@ -25,25 +25,25 @@
     #define DDR  DDRB
   #endif
   #ifndef ST7735_DC_LD
-    #define ST7735_DC_LD  PB1
+    #define ST7735_DC_LD  1
   #endif
   #ifndef ST7735_BL
-    #define ST7735_BL     PB2
+    #define ST7735_BL     2
   #endif
   #ifndef ST7735_CS_SD
-    #define ST7735_CS_SD  PB3
+    #define ST7735_CS_SD  3
   #endif
   #ifndef ST7735_CS_LD
-    #define ST7735_CS_LD  PB4
+    #define ST7735_CS_LD  4
   #endif
   #ifndef ST7735_MOSI
-    #define ST7735_MOSI   PB5
+    #define ST7735_MOSI   5
   #endif
   #ifndef ST7735_MISO
-    #define ST7735_MISO   PB6
+    #define ST7735_MISO   6
   #endif
   #ifndef ST7735_SCK
-    #define ST7735_SCK    PB7
+    #define ST7735_SCK    7
   #endif
 
   #ifndef HW_RESET_DDR
@@ -53,7 +53,7 @@
     #define HW_RESET_PORT PORT
   #endif
   #ifndef HW_RESET_PIN
-    #define HW_RESET_PIN  PB0
+    #define HW_RESET_PIN  0
   #endif
 
   #define DELAY   0x80
@@ -260,7 +260,7 @@
    * @param Esizes    see enum sizes in st7735.h
    * @return void
    */
-  void DrawString(char*, uint16_t, ESizes);
+  void DrawString(volatile const char*, uint16_t, ESizes);
 
   /**
    * @description     Draw line

@@ -1,21 +1,22 @@
 /** 
- * Autotriggered OSCOPE with Timer0
+ * Oscilloscope
  *
  * Copyright (C) 2016 Marian Hrinko.
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       15.08.2017
+ * @datum       01.11.2017
  * @file        main.c
  * @tested      AVR Atmega16
- * @inspiration 
+ * @inspiration http://www.displayfuture.com/Display/datasheet/controller/ST7735.pdf
  * ----------------------------------------------------------------------------------
  */
-#include <stdio.h>
 #include <util/delay.h>
+#include <stdlib.h>
 #include <avr/interrupt.h>
 #include "lib/st7735.h"
 #include "lib/oscope.h"
+#include "lib/menu.h"
 
 /**
  * @description INT0 interrupt
@@ -25,62 +26,103 @@
  */
 ISR(INT0_vect) 
 {
-  // frequencies menu
-  char *v_frequencies[ITEMS_FREQUENCIES] = {
-    "f =  40kHz [T =  25us]", 
-    "f =  10kHz [T = 0.1ms]", 
-    "f = 2.5kHz [T = 0.4ms]", 
-    "f =   1kHz [T =   1ms]"
-  };
-  // declaration & definition
-  char *v_items[ITEMS] = {
-    "1 FREQENCIES", 
-    "2 VOLTAGES", 
-    "3 VALUES", 
-    "4 AXIS"
-  };
-  // main menu
-  char v_menu = (0x0f & _selector);
-  // sub menu
-  char v_sub_menu = (_selector >> 4);
-  // submenu not selected
-  if (v_menu == 0) {
-    // if no exceed
-    if (v_submenu == 0) {
-      // clear screen
-      ClearScreen(0x0000);
-    }
-    // check if no exceed max items
-    if (v_menu < ITEMS) {
-      // increment
+  // menu selector / 1st level
+  uint8_t sel_1st_lev = (0x0f & _selector);
+  // sub menu selector / 2nd level
+  uint8_t sel_2nd_lev = (_selector >> 4);
+
+  // clear screen if 1st attempt to menu
+  if (sel_1st_lev == 0) {
+    // clear screen
+    ClearScreen(0x0000);
+  }  
+  // MENU 
+  // ----------------------------------------------------------
+  // pass through menu items
+  if (sel_2nd_lev == 0) {
+    // check if menu not exceed
+    if (sel_1st_lev < MENU_ITEMS) {
+      // increment menu item
       _selector++;
       // show menu
-      f_show_menu(v_items, ITEMS, (_selector & 0x0f));
+      ShowItems(_menu_items, MENU_ITEMS, _selector);
+    // selector exceed max value
     } else {
       // null menu and submenu
       _selector = 0;
     }
-  // item 1 of menu
-  } else if (v_menu == 1) {
-    // check if no exceed submenu items
-    if (v_submenu < ITEMS_FREQUENCIES) {
-      // needed clear the screen for the first time
-      if (v_submenu == 0) {
-        // clear screen
-        ClearScreen(0x0000);
-      }
-      // increment low menu and move to the left 4 position
-      _selector = (((v_submenu++) << 4) | v_menu);
-      // show submenu
-      f_show_menu(v_frequencies, ITEMS_FREQUENCIES, v_submenu);
+  // SUBMENU - 1 
+  // ----------------------------------------------------------
+  // pass through submenu 1 items
+  } else if (sel_1st_lev == 1) {
+    // check if submenu 1 not exceed
+    if (sel_2nd_lev < SUBMENU_1_ITEMS) {
+      // submenu selector 
+      // increment sub menu and move to the left 4 position
+      _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
+      // show submenu level 1
+      ShowItems(_submenu_1_items, SUBMENU_1_ITEMS, sel_2nd_lev+1);
+    // selector exceed max value
     } else {
-      // clear screen
-      ClearScreen(0x0000);
-      // null submenu 
-      _selector = (0x0f & _selector);
+      // null menu and submenu
+      _selector = 0x01;
       // show menu
-      f_show_menu(items, ITEMS, (_selector & 0x0f));
-    }    
+      ShowItems(_menu_items, MENU_ITEMS, _selector);   
+    }
+  // SUBMENU - 2 
+  // ----------------------------------------------------------
+  // pass through submenu 2 items
+  } else if (sel_1st_lev == 2) {
+    // check if submenu 1 not exceed
+    if (sel_2nd_lev < SUBMENU_2_ITEMS) {
+      // submenu selector 
+      // increment sub menu and move to the left 4 position
+      _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
+      // show submenu level 1
+      ShowItems(_submenu_2_items, SUBMENU_2_ITEMS, sel_2nd_lev+1);
+    // selector exceed max value
+    } else {
+      // null menu and submenu
+      _selector = 0x02;
+      // show menu
+      ShowItems(_menu_items, MENU_ITEMS, _selector);   
+    }
+  // SUBMENU - 3 
+  // ----------------------------------------------------------
+  // pass through submenu 3 items
+  } else if (sel_1st_lev == 3) {
+    // check if submenu 1 not exceed
+    if (sel_2nd_lev < SUBMENU_3_ITEMS) {
+      // submenu selector 
+      // increment sub menu and move to the left 4 position
+      _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
+      // show submenu level 1
+      ShowItems(_submenu_3_items, SUBMENU_3_ITEMS, sel_2nd_lev+1);
+    // selector exceed max value
+    } else {
+      // null menu and submenu
+      _selector = 0x03;
+      // show menu
+      ShowItems(_menu_items, MENU_ITEMS, _selector);   
+    }
+  // SUBMENU - 4 
+  // ----------------------------------------------------------
+  // pass through submenu 4 items
+  } else if (sel_1st_lev == 4) {
+    // check if submenu 1 not exceed
+    if (sel_2nd_lev < SUBMENU_4_ITEMS) {
+      // submenu selector 
+      // increment sub menu and move to the left 4 position
+      _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
+      // show submenu level 1
+      ShowItems(_submenu_4_items, SUBMENU_4_ITEMS, sel_2nd_lev+1);
+    // selector exceed max value
+    } else {
+      // null menu and submenu
+      _selector = 0x04;
+      // show menu
+      ShowItems(_menu_items, MENU_ITEMS, _selector);   
+    }
   }
 }
 
@@ -92,63 +134,101 @@ ISR(INT0_vect)
  */
 ISR(INT1_vect) 
 {
-  // sreg value
-  char v_sreg;
-  // frequencies menu
-  char *v_frequencies[ITEMS_FREQUENCIES] = {
-    "f =  40kHz [T =  25us]", 
-    "f =  10kHz [T = 0.1ms]", 
-    "f = 2.5kHz [T = 0.4ms]", 
-    "f =   1kHz [T =   1ms]"
-  };
-  // array buffer
-  //   40kHz ( 25us) -> OCR0 =  49; N =  8; (ADC PRESCALER 16)
-  //   10kHz (100us) -> OCR0 = 199; N =  8; (ADC PRESCALER 32)
-  //  2.5kHz (0.4ms) -> OCR0 =  99; N = 64; (ADC PRESCALER 32)
-  //    1kHz (  1ms) -> OCR0 = 249; N = 64; (ADC PRESCALER 32)
-  // OCR0, Timer0 prescaler, Ad converter prescaler
-  char v_settings_freq[ITEMS_FREQUENCIES][3] = {
-    { 49,  PRESCALER_8, ADC_PRESCALER_16}, 
-    {199,  PRESCALER_8, ADC_PRESCALER_32}, 
-    { 99, PRESCALER_64, ADC_PRESCALER_32}, 
-    {249, PRESCALER_64, ADC_PRESCALER_32}
-  };
-  // main menu
-  char v_menu = (0x0f & _selector);
-  // sub menu
-  char v_sub_menu = (_selector >> 4);
-  // needed clear the screen for the first time
-  if (v_menu == 1) {
-    // needed clear the screen for the first time
-    if (v_submenu == 0) {
-      // clear screen
-      ClearScreen(0x0000);
-      // increment low menu and move to the left 4 position
-      _selector = (((v_submenu++) << 4) | v_menu);
-      // show submenu
-      f_show_menu(v_frequencies, ITEMS_FREQUENCIES, v_submenu);
-    } else {
-      // save SREG values
-      v_sreg = SREG;
-      // disable interrupts
-      cli();      
-      // switch off timer0
-      TIMER0_START(0);
-      // switch off ADC
-      ADC_PRESCALER(0);
-      // set timer counter
-      OCR0 = v_settings_freq[v_submenu-1][0];
-      // set prescaler timer 0
-      TIMER0_START(v_settings_freq[v_submenu-1][1]);
-      // set prescaler ADC
-      ADC_PRESCALER(settings_freq[v_submenu-1][2]);
-      // enable adc 
-      TIFR |= (1 << OCF0);
-      // set stored values
-      SREG = v_sreg;
-      // enable interrputs
-      sei();
+
+  // menu selector / 1st level
+  uint8_t sel_1st_lev = (0x0f & _selector);
+  // sub menu selector / 2nd level
+  uint8_t sel_2nd_lev = (_selector >> 4);
+
+  // show submenu items for corresponding menu items
+  // - clear screen and load items given submenu
+  if (sel_2nd_lev == 0) {
+    // clear screen
+    ClearScreen(0x0000);
+    // -----------------------------------------------------------
+    // SUBMENU 1
+    // switch according to menu items
+    if (sel_1st_lev == 1) {
+      // submenu selector 
+      // increment sub menu and move to the left 4 position
+      _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
+      // show submenu level 1
+      ShowItems(_submenu_1_items, SUBMENU_1_ITEMS, sel_2nd_lev+1);
+    // -----------------------------------------------------------
+    // SUBMENU 2
+    } else if (sel_1st_lev == 2) {
+      // submenu selector 
+      // increment sub menu and move to the left 4 position
+      _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
+      // show submenu level 1
+      ShowItems(_submenu_2_items, SUBMENU_2_ITEMS, sel_2nd_lev+1);
+    // -----------------------------------------------------------
+    // SUBMENU 3
+    } else if (sel_1st_lev == 3) {
+      // submenu selector 
+      // increment sub menu and move to the left 4 position
+      _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
+      // show submenu level 1
+      ShowItems(_submenu_3_items, SUBMENU_3_ITEMS, sel_2nd_lev+1);
+    // -----------------------------------------------------------
+    // SUBMENU 4
+    } else if (sel_1st_lev == 4) {
+      // submenu selector 
+      // increment sub menu and move to the left 4 position
+      _selector = (((sel_2nd_lev+1) << 4) | sel_1st_lev);
+      // show submenu level 1
+      ShowItems(_submenu_4_items, SUBMENU_4_ITEMS, sel_2nd_lev+1);
     }
+  // 1st submenu processing
+  // -------------------------------------------------------------
+  // this is case when operation should be performed for
+  // example change frequency settings
+  } else if (sel_1st_lev == 1) {
+    // null flag
+    _flag &= ~(0x03);
+    // update _flag
+    _flag |= (sel_2nd_lev-1);
+    // set frequency
+    SetFreq(sel_2nd_lev);
+    // null menu and submenu
+    _selector = 0x01;
+    // show menu
+    ShowItems(_menu_items, MENU_ITEMS, _selector);
+  // 2nd submenu processing
+  // -------------------------------------------------------------
+  // this is case when operation should be performed for
+  // change voltage settings
+  } else if (sel_1st_lev == 2) {
+    // null flag
+    _flag &= ~(0x0C);
+    // update _flag
+    _flag |= ((sel_2nd_lev-1) << 2);
+  // 3rd submenu processing
+  // -------------------------------------------------------------
+  // this is case when operation should be performed for
+  // change value settings
+  } else if (sel_1st_lev == 3) {
+    // null flag
+    _flag &= ~(0x30);
+    // update _flag
+    _flag |= ((sel_2nd_lev-1) << 4);
+    // null menu and submenu
+    _selector = 0x03;
+    // show menu
+    ShowItems(_menu_items, MENU_ITEMS, _selector);
+  // 4th submenu processing
+  // -------------------------------------------------------------
+  // this is case when operation should be performed for
+  // change axis settings
+  } else if (sel_1st_lev == 4) {
+    // null flag
+    _flag &= ~(0xC0);
+    // update _flag
+    _flag |= ((sel_2nd_lev-1) << 6);
+    // null menu and submenu
+    _selector = 0x04;
+    // show menu
+    ShowItems(_menu_items, MENU_ITEMS, _selector);
   }
 }
 
@@ -163,8 +243,7 @@ ISR(ADC_vect)
   // set to zero after match registers TCNT0 a OCR1B
   TIFR |= (1 << OCF1B);
   // check if index is less than max values
-  if (_index++ < WIDTH)
-  {
+  if (_index++ < WIDTH) {
     // store value
     _buffer[_index-1] = ADCH;
   }

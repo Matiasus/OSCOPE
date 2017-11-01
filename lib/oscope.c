@@ -21,6 +21,7 @@
 #include <util/delay.h>
 #include "st7735.h"
 #include "oscope.h"
+#include "menu.h"
 
 // number of sample
 volatile uint8_t _index = 0;
@@ -29,20 +30,6 @@ volatile uint8_t _selector = 0;
 // array buffer
 volatile uint8_t _buffer[WIDTH];
 
-// array buffer
-//   40kHz ( 25us) -> OCR0 =  49; N =  8; (ADC PRESCALER 16)
-//   10kHz (100us) -> OCR0 = 199; N =  8; (ADC PRESCALER 32)
-//  2.5kHz (0.4ms) -> OCR0 =  99; N = 64; (ADC PRESCALER 32)
-//    1kHz (  1ms) -> OCR0 = 249; N = 64; (ADC PRESCALER 32)
-// OCR0 
-// Timer0 prescaler
-// Ad converter prescaler
-volatile uint8_t _frequency[ITEMS_FREQUENCIES][3] = {
-  { 49, PRESCALER_8,ADC_PRESCALER_16}, 
-  {199, PRESCALER_8,ADC_PRESCALER_32}, 
-  { 99,PRESCALER_64,ADC_PRESCALER_32}, 
-  {249,PRESCALER_64,ADC_PRESCALER_32}
-};
 
 /**
  * @description Init settings
@@ -60,13 +47,14 @@ void StartScope(void)
   Timer1AInit();
   // init timer 0
   Timer0Init();
+
   // globa interrupts enabled
   sei();
   // loop
   while(1) {
-    // show if only not menu selected
+    // select screen
     if (_selector == 0) {
-      // show after if buffer full
+      // show after buffer full
       if (_index > WIDTH) {
         // show buffer
         BufferShow();
@@ -127,8 +115,7 @@ void Timer0Init(void)
 }
 
 /***
- * Inicializacia casovaca Timer1A
- * nastavenie frekvencie snimaneho impulzu
+ * Init timer/counter Timer1A
  *
  * @param  Void
  * @return Void
@@ -182,7 +169,7 @@ void AdcInit(void)
   // Timer/Counter0 Compare Match
   SFIOR |= (1 << ADTS1) | (1 << ADTS0);
   // select channel
-  ADC_CHANNEL(1);
+  ADC_CHANNEL(0);
 }
 
 /***
@@ -211,37 +198,9 @@ void Int01Init(void)
  * @param void
  * @return void
  */
-void AxisShow()
+void Axis()
 {
-  // init value for x
-  uint8_t i = OFFSET_X;
-  // color line
-  uint16_t color = 0x5C4B;
 
-  // draw axis x
-  DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, OFFSET_Y+HEIGHT, color);
-  //  draw axis x
-  DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, OFFSET_Y, color);
-  //  draw axis y
-  DrawLineVertical(OFFSET_X, OFFSET_Y, OFFSET_Y+HEIGHT, color);
-  //  draw axis y
-  DrawLineVertical(OFFSET_X+WIDTH, OFFSET_Y, OFFSET_Y+HEIGHT, color);
-  // draw auxillary axis x
-  while (i <= WIDTH+OFFSET_X) {
-    // draw auxillary signs up
-    DrawLineVertical(i, OFFSET_Y, OFFSET_Y+HEIGHT, color);
-    // move to right
-    i += STEP_X;
-  }
-  // init value for y
-  i = OFFSET_Y;
-  // draw auxillary axis y
-  while (i <= HEIGHT+OFFSET_Y) {
-    // draw line
-    DrawLineHorizontal(OFFSET_X, OFFSET_X+WIDTH, i, color);
-    // move to right
-    i += STEP_Y;
-  }
 }
 
 /**
@@ -265,15 +224,16 @@ void BufferShow()
   // set text position
   SetPosition(0, OFFSET_Y+HEIGHT - 8);
   // vykreslenie osi
-  AxisShow();
+  ShowAxis();
   // show buffer values
   while (i > 0) {
-    // draw line
-    //DrawLine(i-1+OFFSET_X, i+OFFSET_X, (_buffer[i-1]>>1), (_buffer[i]>>1), 0xffff);
+    // draw values
     DrawLine(i-1+OFFSET_X, i+OFFSET_X, OFFSET_Y+(HEIGHT-(_buffer[i-1]>>1)), OFFSET_Y+(HEIGHT-(_buffer[i]>>1)), 0xffff);
     // decrement
     i--;
   }
+  // call set values
+  ShowValues();
   // show on screen
   UpdateScreen();
   // delay
@@ -290,9 +250,10 @@ void BufferShow()
  * @param  char*
  * @param  uint8_t
  * @param  uint8_t
+ * @param  uint8_t
  * @return Void
  */
-void ShowItems(char **items, uint8_t count, uint8_t selector)
+void ShowItems(const volatile char **items, uint8_t count, uint8_t selector)
 {
   uint8_t i = 0;
   // init position
@@ -315,7 +276,7 @@ void ShowItems(char **items, uint8_t count, uint8_t selector)
   // increase value
   step_y += height;
 
-  // check if reach the end
+  // check if it reaches the end
   while (i < count) {
     // fill background color
     if (i == (selector-1)) {
