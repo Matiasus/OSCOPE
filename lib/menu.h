@@ -21,11 +21,22 @@
   // submenu items
   #define SUBMENU_1_ITEMS 4
   // submenu items
-  #define SUBMENU_2_ITEMS 4
+  #define SUBMENU_2_ITEMS 3
   // submenu items
   #define SUBMENU_3_ITEMS 2
   // submenu items
   #define SUBMENU_4_ITEMS 4
+
+  /** @const Port for controlling input voltage */
+  #define VOLT_CONTROL_DDR DDRC
+  /** @const Port for controlling input voltage */
+  #define VOLT_CONTROL_PORT PORTC  
+  /** @const Voltage control pin 1 */
+  #define VOLT_CONTROL_1 7
+  /** @const Voltage control pin 2 */
+  #define VOLT_CONTROL_2 6
+  /** @const Voltage control pin 3 */
+  #define VOLT_CONTROL_3 5
 
   // flag show which item is selected
   extern volatile uint8_t _flag;
@@ -56,6 +67,14 @@
    * @return Void
    */
   void SetFreq(uint8_t);
+
+  /**
+   * @description Voltage settings
+   *
+   * @param  void
+   * @return Void
+   */
+  void SetVolt(void);
 
   /**
    * @description 

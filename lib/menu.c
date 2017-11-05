@@ -31,17 +31,16 @@ const volatile char *_menu_items[MENU_ITEMS] = {
 };
 // submenu text - frequencies
 const volatile char *_submenu_1_items[SUBMENU_1_ITEMS] = {
-  "f =  40kHz [T= 25us]", 
-  "f =  10kHz [T=0.1ms]", 
-  "f = 2.5kHz [T=0.4ms]", 
-  "f =   1kHz [T=  1ms]"
+  "f = 40kHz [T= 25us]", 
+  "f = 10kHz [T=100us]", 
+  "f =  2kHz [T=0.5ms]", 
+  "f = 500Hz [T=  2ms]"
 };
 // submenu text - voltages
 const volatile char *_submenu_2_items[SUBMENU_2_ITEMS] = {
-  "U str", 
-  "U max",
-  "U min",
-  "U rms" 
+  "GAIN 1x", 
+  "GAIN 2x",
+  "GAIN 4x"
 };
 // submenu text - values
 const volatile char *_submenu_3_items[SUBMENU_3_ITEMS] = {
@@ -59,18 +58,18 @@ const volatile char *_submenu_4_items[SUBMENU_4_ITEMS] = {
 // SETTINGS for microprocesor
 // --------------------------------------------------------
 // array buffer
-//   40kHz ( 25us) -> OCR0 =  49; N =  8; (ADC PRESCALER 16)
-//   10kHz (100us) -> OCR0 = 199; N =  8; (ADC PRESCALER 32)
-//  2.5kHz (0.4ms) -> OCR0 =  99; N = 64; (ADC PRESCALER 32)
-//    1kHz (  1ms) -> OCR0 = 249; N = 64; (ADC PRESCALER 32)
+//   40kHz ( 25us) -> OCR0 =  49; N =   8; (ADC PRESCALER  16)
+//   10kHz (100us) -> OCR0 = 199; N =   8; (ADC PRESCALER  32)
+//    2kHz (0.5ms) -> OCR0 = 124; N =  64; (ADC PRESCALER  32)
+//   500Hz (  2ms) -> OCR0 = 124; N = 256; (ADC PRESCALER 128)
 // OCR0 
 // Timer0 prescaler
 // Ad converter prescaler
 const volatile uint8_t _submenu_1_set[SUBMENU_1_ITEMS][3] = {
-  { 49, PRESCALER_8,ADC_PRESCALER_16}, 
-  {199, PRESCALER_8,ADC_PRESCALER_32}, 
-  { 99,PRESCALER_64,ADC_PRESCALER_32}, 
-  {249,PRESCALER_64,ADC_PRESCALER_32}
+  { 49, PRESCALER_8,   ADC_PRESCALER_16}, 
+  {199, PRESCALER_8,   ADC_PRESCALER_32}, 
+  {124, PRESCALER_64,  ADC_PRESCALER_32}, 
+  {124, PRESCALER_256, ADC_PRESCALER_128}
 };
 
 /**
@@ -111,24 +110,87 @@ void SetFreq(uint8_t sel_2nd_level)
  * @param  Void
  * @return Void
  */
+void SetVolt()
+{
+  // set position for values
+  SetPosition(132, 8);
+  // ---------------------------------------------
+  // GAIN 1
+  if ((_flag & 0x0C) == 0x00) {
+    // set input voltage
+    VOLT_CONTROL_PORT |= (1 << VOLT_CONTROL_1);
+    // set input voltage
+    VOLT_CONTROL_PORT &= ~((1 << VOLT_CONTROL_2)|
+                           (1 << VOLT_CONTROL_3));
+  // ---------------------------------------------
+  // GAIN 2
+  } else if ((_flag & 0x0C) == 4) {
+    // set input voltage
+    VOLT_CONTROL_PORT |= (1 << VOLT_CONTROL_2);
+    // set input voltage
+    VOLT_CONTROL_PORT &= ~((1 << VOLT_CONTROL_1)|
+                           (1 << VOLT_CONTROL_3));
+  // ---------------------------------------------
+  // GAIN 4
+  } else if ((_flag & 0x0C) == 8) {
+    // set input voltage
+    VOLT_CONTROL_PORT |= (1 << VOLT_CONTROL_3);
+    // set input voltage
+    VOLT_CONTROL_PORT &= ~((1 << VOLT_CONTROL_1)|
+                           (1 << VOLT_CONTROL_2)); 
+  }
+}
+
+/**
+ * @description 
+ *
+ * @param  Void
+ * @return Void
+ */
 void ShowValues()
 {
+  // condition for show values
   if ((_flag & 0x30) == 0) {
+    // FREQUENCY
+    // -------------------------------------
     // set position for values
     SetPosition(132, 6);
+    // draw values
+    DrawString("FREQ=", 0xffff, X1);
+    // set position for values
+    SetPosition(132, 16);
     // check which value frequency
     if ((_flag & 0x03) == 0) {
       // draw values
-      DrawString(" 40k", 0xffff, X1);
+      DrawString("40kHz", 0xffff, X1);
     } else if ((_flag & 0x03) == 1) {
       // draw values
-      DrawString(" 10k", 0xffff, X1);
+      DrawString("10kHz", 0xffff, X1);
     } else if ((_flag & 0x03) == 2) {
       // draw values
-      DrawString("2.5k", 0xffff, X1);
+      DrawString(" 2kHz", 0xffff, X1);
     } else if ((_flag & 0x03) == 3) {
       // draw values
-      DrawString("  1k", 0xffff, X1);
+      DrawString("500Hz", 0xffff, X1);
+    }
+    // VOLTAGES
+    // -------------------------------------
+    // set position for voltages
+    SetPosition(132, 38);
+    // draw values
+    DrawString("GAIN=", 0xffff, X1);
+    // set position for values
+    SetPosition(132, 48);
+    // check which value frequency
+    if ((_flag & 0x0C) == 0x00) {
+      // draw values
+      DrawString(" 1x", 0xffff, X1);
+    } else if ((_flag & 0x0C) == 0x04) {
+      // draw values
+      DrawString(" 2x", 0xffff, X1);
+    } else if ((_flag & 0x0C) == 0x08) {
+      // draw values
+      DrawString(" 4x", 0xffff, X1);
     }
   }
 }

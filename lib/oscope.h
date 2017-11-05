@@ -38,17 +38,18 @@
   // krok na y ovej osi
   #define STEP_Y 32
   // @var Mozne kombinacie preddelicky hodin/taktu
-  #define PRESCALER_STOP   0
-  #define PRESCALER_1      1
-  #define PRESCALER_8      2
-  #define PRESCALER_64     3
-  #define PRESCALER_256    4
-  #define PRESCALER_1024   5
-  #define PRESCALER_T1_F   6
-  #define PRESCALER_T1_R   7
-  #define ADC_PRESCALER_16 4
-  #define ADC_PRESCALER_32 5
-  #define ADC_PRESCALER_64 6
+  #define PRESCALER_STOP    0
+  #define PRESCALER_1       1
+  #define PRESCALER_8       2
+  #define PRESCALER_64      3
+  #define PRESCALER_256     4
+  #define PRESCALER_1024    5
+  #define PRESCALER_T1_F    6
+  #define PRESCALER_T1_R    7
+  #define ADC_PRESCALER_16  4
+  #define ADC_PRESCALER_32  5
+  #define ADC_PRESCALER_64  6
+  #define ADC_PRESCALER_128 7
   // Spustenie casovaca 0
   // - nulovanie bitov preddelicky
   // - nastavenie 
@@ -112,6 +113,14 @@
    * @return Void
    */
   void Int01Init(void);
+
+  /**
+   * @description Ports init
+   *
+   * @param  Void
+   * @return Void
+   */
+  void PortsInit(void);
   
   /**
    * @description Axis show

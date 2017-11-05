@@ -203,6 +203,12 @@ ISR(INT1_vect)
     _flag &= ~(0x0C);
     // update _flag
     _flag |= ((sel_2nd_lev-1) << 2);
+    // set frequency
+    SetVolt();
+    // null menu and submenu
+    _selector = 0x02;
+    // show menu
+    ShowItems(_menu_items, MENU_ITEMS, _selector);
   // 3rd submenu processing
   // -------------------------------------------------------------
   // this is case when operation should be performed for
