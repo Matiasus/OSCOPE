@@ -1,12 +1,12 @@
 /** 
- * Auxillary functions
+ * Basic functions for oscilloscop
  *
  * Copyright (C) 2016 Marian Hrinko.
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       08.01.2016
- * @file        st7735.h
+ * @datum       04.11.2017
+ * @file        oscope.h
  * @tested      AVR Atmega16
  * @inspiration 
  * ------------------------------------------------
@@ -25,19 +25,19 @@
   /** @const Position loading image y end */
   #define POSITION_YE  55
 
-  // sirka (pocet zaznamenanych dat)
+  // width (number of recorder data)
   #define WIDTH 127
-  // vyska
+  // height (number ADC resolution)
   #define HEIGHT 127
-  // posuv x
+  // move x
   #define OFFSET_X 0
-  // posuv y
+  // move y
   #define OFFSET_Y 0
-  // krok na x ovej osi
+  // step for auxillary axis x
   #define STEP_X 32
-  // krok na y ovej osi
+  // step for auxillary axis y
   #define STEP_Y 32
-  // @var Mozne kombinacie preddelicky hodin/taktu
+  // @var Timer/Counter prescalers
   #define PRESCALER_STOP    0
   #define PRESCALER_1       1
   #define PRESCALER_8       2
@@ -46,32 +46,25 @@
   #define PRESCALER_1024    5
   #define PRESCALER_T1_F    6
   #define PRESCALER_T1_R    7
+  // @var ADC prescalers
   #define ADC_PRESCALER_16  4
   #define ADC_PRESCALER_32  5
   #define ADC_PRESCALER_64  6
   #define ADC_PRESCALER_128 7
-  // Spustenie casovaca 0
-  // - nulovanie bitov preddelicky
-  // - nastavenie 
+  // Set Timer/Counter 0 prescaler
   #define TIMER0_START(PRESCALER) { TCCR0 &= ~((1 << CS12) | (1 << CS11) | (1 << CS10)); TCCR0 |= PRESCALER & 0x07; }
-  // Spustenie casovaca 1A
-  // - nulovanie bitov preddelicky
-  // - nastavenie
+  // Set Timer/Counter 1 prescaler
   #define TIMER1A_START(PRESCALER) { TCCR1B &= ~((1 << CS12) | (1 << CS11) | (1 << CS10)); TCCR1B |= PRESCALER & 0x07; }
-  // Vyber kanala
-  // - nulovanie poslednych troch bitov
-  // - nastavenie poslednych troch bitov podla kanala
+  // ADC channel selector
   #define ADC_CHANNEL(CHANNEL) { ADMUX &= 0xF8; ADMUX |= CHANNEL & 0x07; }
-  // Spustenie casovaca 1A
-  // - nulovanie bitov preddelicky
-  // - nastavenie
+  // Set ADC prescaler
   #define ADC_PRESCALER(PRESCALER) { ADCSRA &= ~((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0)); ADCSRA |= PRESCALER & 0x07; }
   
   // axis
   extern volatile uint8_t _selector;
-  // pocitadlo
+  // counter
   extern volatile uint8_t _index;
-  // pole hodnot buffra
+  // array buffer
   extern volatile uint8_t _buffer[WIDTH];
  
   /**
