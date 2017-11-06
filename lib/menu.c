@@ -1,5 +1,5 @@
 /** 
- * Auxillary functions
+ * Menu display functions 
  *
  * Copyright (C) 2016 Marian Hrinko.
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
@@ -210,7 +210,7 @@ void ShowAxis()
   uint16_t color = 0x5C4B;
 
   // --------------------------------------------------
-  // Main axes show
+  // Main axis show
   if ((_flag & 0xC0) == 0) {
     // Main axis x
     // draw axis x
