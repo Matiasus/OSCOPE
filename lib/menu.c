@@ -203,7 +203,6 @@ void ShowValues()
  */
 void ShowAxis()
 {
-
   // init value for x
   uint8_t i = OFFSET_X;
   // color line
