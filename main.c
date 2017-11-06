@@ -134,7 +134,6 @@ ISR(INT0_vect)
  */
 ISR(INT1_vect) 
 {
-
   // menu selector / 1st level
   uint8_t sel_1st_lev = (0x0f & _selector);
   // sub menu selector / 2nd level
