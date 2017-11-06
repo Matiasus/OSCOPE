@@ -7,7 +7,7 @@ Simple oscilloscope using inbuilt A/D convereter with frequency range settings u
 - **RESOLUTION:**&nbsp;8 bits resolution
 - **MEMORY BUFFER:**&nbsp;128 bits
 
-## Demosntration
+## Demonstration
 ![40kHz sampling](img/5.jpg)
 ![40kHz sampling](img/1.jpg)
 ![40kHz sampling](img/2.jpg)
