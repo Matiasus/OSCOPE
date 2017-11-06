@@ -228,7 +228,7 @@ void BufferShow()
   ClearScreen(0x0000);
   // set text position
   SetPosition(0, OFFSET_Y+HEIGHT - 8);
-  // vykreslenie osi
+  // show axis
   ShowAxis();
   // show buffer values
   while (i > 0) {
