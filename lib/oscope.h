@@ -28,6 +28,7 @@
   // width (number of recorder data)
   #define WIDTH 127
   // height (number ADC resolution)
+
   #define HEIGHT 127
   // move x
   #define OFFSET_X 0

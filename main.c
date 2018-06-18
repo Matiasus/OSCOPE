@@ -8,7 +8,7 @@
  * @datum       01.11.2017
  * @file        main.c
  * @tested      AVR Atmega16
- * @inspiration 
+ * @inspiration http://www.displayfuture.com/Display/datasheet/controller/ST7735.pdf
  * ----------------------------------------------------------------------------------
  */
 #include <util/delay.h>

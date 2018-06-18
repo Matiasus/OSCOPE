@@ -207,7 +207,6 @@ void ShowAxis()
   uint8_t i = OFFSET_X;
   // color line
   uint16_t color = 0x5C4B;
-
   // --------------------------------------------------
   // Main axis show
   if ((_flag & 0xC0) == 0) {

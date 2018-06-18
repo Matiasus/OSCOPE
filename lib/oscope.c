@@ -45,7 +45,7 @@ void StartScope(void)
   // Ports init for voltage cotrolling
   PortsInit();
 
-  // globa interrupts enabled
+  // global interrupts enabled
   sei();
   // loop
   while(1) {
