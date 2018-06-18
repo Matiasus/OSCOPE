@@ -51,7 +51,7 @@ ISR(INT0_vect)
       // null menu and submenu
       _selector = 0;
     }
-  // SUBMENU - 1 
+  // SUBMENU 1 
   // ----------------------------------------------------------
   // pass through submenu 1 items
   } else if (sel_1st_lev == 1) {
@@ -64,16 +64,16 @@ ISR(INT0_vect)
       ShowItems(_submenu_1_items, SUBMENU_1_ITEMS, sel_2nd_lev+1);
     // selector exceed max value
     } else {
-      // null menu and submenu
+      // set to 1. menu item
       _selector = 0x01;
       // show menu
       ShowItems(_menu_items, MENU_ITEMS, _selector);   
     }
-  // SUBMENU - 2 
+  // SUBMENU 2 
   // ----------------------------------------------------------
   // pass through submenu 2 items
   } else if (sel_1st_lev == 2) {
-    // check if submenu 1 not exceed
+    // check if submenu 2 not exceed
     if (sel_2nd_lev < SUBMENU_2_ITEMS) {
       // submenu selector 
       // increment sub menu and move to the left 4 position
@@ -82,16 +82,16 @@ ISR(INT0_vect)
       ShowItems(_submenu_2_items, SUBMENU_2_ITEMS, sel_2nd_lev+1);
     // selector exceed max value
     } else {
-      // null menu and submenu
+      // set to 2. menu item
       _selector = 0x02;
       // show menu
       ShowItems(_menu_items, MENU_ITEMS, _selector);   
     }
-  // SUBMENU - 3 
+  // SUBMENU 3 
   // ----------------------------------------------------------
   // pass through submenu 3 items
   } else if (sel_1st_lev == 3) {
-    // check if submenu 1 not exceed
+    // check if submenu 3 not exceed
     if (sel_2nd_lev < SUBMENU_3_ITEMS) {
       // submenu selector 
       // increment sub menu and move to the left 4 position
@@ -100,16 +100,16 @@ ISR(INT0_vect)
       ShowItems(_submenu_3_items, SUBMENU_3_ITEMS, sel_2nd_lev+1);
     // selector exceed max value
     } else {
-      // null menu and submenu
+      // set to 3. menu item
       _selector = 0x03;
       // show menu
       ShowItems(_menu_items, MENU_ITEMS, _selector);   
     }
-  // SUBMENU - 4 
+  // SUBMENU 4 
   // ----------------------------------------------------------
   // pass through submenu 4 items
   } else if (sel_1st_lev == 4) {
-    // check if submenu 1 not exceed
+    // check if submenu 4 not exceed
     if (sel_2nd_lev < SUBMENU_4_ITEMS) {
       // submenu selector 
       // increment sub menu and move to the left 4 position
@@ -118,7 +118,7 @@ ISR(INT0_vect)
       ShowItems(_submenu_4_items, SUBMENU_4_ITEMS, sel_2nd_lev+1);
     // selector exceed max value
     } else {
-      // null menu and submenu
+      // set to 4. menu item
       _selector = 0x04;
       // show menu
       ShowItems(_menu_items, MENU_ITEMS, _selector);   
@@ -134,7 +134,6 @@ ISR(INT0_vect)
  */
 ISR(INT1_vect) 
 {
-
   // menu selector / 1st level
   uint8_t sel_1st_lev = (0x0f & _selector);
   // sub menu selector / 2nd level
@@ -203,6 +202,12 @@ ISR(INT1_vect)
     _flag &= ~(0x0C);
     // update _flag
     _flag |= ((sel_2nd_lev-1) << 2);
+    // set frequency
+    SetVolt();
+    // null menu and submenu
+    _selector = 0x02;
+    // show menu
+    ShowItems(_menu_items, MENU_ITEMS, _selector);
   // 3rd submenu processing
   // -------------------------------------------------------------
   // this is case when operation should be performed for

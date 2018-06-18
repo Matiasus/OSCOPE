@@ -5,16 +5,12 @@
  * Written by Marian Hrinko (mato.hrinko@gmail.com)
  *
  * @author      Marian Hrinko
- * @datum       04.02.2017
- * @file        st7735.c
+ * @datum       04.11.2017
+ * @file        oscope.c
  * @tested      AVR Atmega16
  * @inspiration 
  *
  */
-#ifndef F_CPU
-  #define F_CPU 16000000
-#endif
-
 #include <avr/interrupt.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -29,7 +25,6 @@ volatile uint8_t _index = 0;
 volatile uint8_t _selector = 0;
 // array buffer
 volatile uint8_t _buffer[WIDTH];
-
 
 /**
  * @description Init settings
@@ -47,8 +42,10 @@ void StartScope(void)
   Timer1AInit();
   // init timer 0
   Timer0Init();
+  // Ports init for voltage cotrolling
+  PortsInit();
 
-  // globa interrupts enabled
+  // global interrupts enabled
   sei();
   // loop
   while(1) {
@@ -130,7 +127,7 @@ void Timer1AInit(void)
   //    fclk = 16 Mhz
   //       N = 1
   //   foc1A = 1/Toc1A
-  OCR1A = 15999;
+  OCR1A = 3999;
   // PIN PD5 - OC1A ako vystupny 
   DDRD  |= (1 << PD5);
   // Waveform generation - toggle
@@ -138,7 +135,7 @@ void Timer1AInit(void)
   // Mod CTC -> TOP = OCR1A
   TCCR1B |= (1 << WGM12);
   // start timer 1A
-  TIMER1A_START(PRESCALER_1);  
+  TIMER1A_START(PRESCALER_8);  
 }
 
 /***
@@ -193,14 +190,22 @@ void Int01Init(void)
 }
 
 /**
- * @description Axis show
+ * @description Ports init
  *
- * @param void
+ * @param  void
  * @return void
  */
-void Axis()
+void PortsInit()
 {
-
+  // set as outputs
+  VOLT_CONTROL_DDR |= (1 << VOLT_CONTROL_1)|
+                      (1 << VOLT_CONTROL_2)|
+                      (1 << VOLT_CONTROL_3);
+  // set to high level 
+  VOLT_CONTROL_PORT |= (1 << VOLT_CONTROL_1);
+  // set to low level
+  VOLT_CONTROL_PORT &= ~((1 << VOLT_CONTROL_2)|
+                         (1 << VOLT_CONTROL_3));
 }
 
 /**
@@ -214,7 +219,7 @@ void BufferShow()
   // sreg value
   char sreg;
   // index
-  uint8_t i = WIDTH;
+  uint8_t i = WIDTH-1;
   // save SREG values
   sreg = SREG;
   // disable interrupts
@@ -223,7 +228,7 @@ void BufferShow()
   ClearScreen(0x0000);
   // set text position
   SetPosition(0, OFFSET_Y+HEIGHT - 8);
-  // vykreslenie osi
+  // show axis
   ShowAxis();
   // show buffer values
   while (i > 0) {
