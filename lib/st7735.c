@@ -453,7 +453,7 @@ uint8_t Data16BitsSend(uint16_t data)
 }
 
 /**
- * Write color pixels
+ * @description Write color pixels
  *
  * @param uint16_t color
  * @param uint16_t counter
